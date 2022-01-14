@@ -1,36 +1,38 @@
 package com.singh.astha.medicinereminder.services.impl;
 
-import com.singh.astha.medicinereminder.dtos.CategoryRequest;
+import com.singh.astha.medicinereminder.dtos.CategoryRequestDto;
+import com.singh.astha.medicinereminder.dtos.CategoryResponseDto;
 import com.singh.astha.medicinereminder.dtos.transformers.CategoryDtoTransformer;
 import com.singh.astha.medicinereminder.models.Category;
-import com.singh.astha.medicinereminder.repository.CategoryRespository;
+import com.singh.astha.medicinereminder.repository.CategoryRepository;
 import com.singh.astha.medicinereminder.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
+    private final CategoryRepository categoryRepository;
+    private final CategoryDtoTransformer categoryDtoTransformer;
+
     @Autowired
-    private CategoryRespository categoryRespository;
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryDtoTransformer categoryDtoTransformer) {
+        this.categoryRepository = categoryRepository;
+        this.categoryDtoTransformer = categoryDtoTransformer;
+    }
 
     @Override
-    public Long addCategory(CategoryRequest categoryRequest, Long userName) {
-        if (categoryRequest.getName()!=null) {
-            Category category = CategoryDtoTransformer.convertCategoryRequestDtoToCategory(categoryRequest,userName);
-
-            Category savedCategory = null;
-            try {
-                savedCategory = categoryRespository.save(category);
-            } catch (Exception e) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Same Category is already exist");
-            }
-            return savedCategory.getId();
+    public CategoryResponseDto addCategory(CategoryRequestDto categoryRequestDto, Long userName) {
+        Category category = categoryDtoTransformer.convertCategoryRequestDtoToCategory(categoryRequestDto, userName);
+        Optional<Category> categoryOptional = categoryRepository.findByName(categoryRequestDto.getName());
+        if (categoryOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Same Category is already exist");
         }
-        else{
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Category name is missing");
-        }
+        Category savedCategory = categoryRepository.save(category);
+        return categoryDtoTransformer.convertCategoryToCategoryResponseDto(savedCategory);
     }
 }

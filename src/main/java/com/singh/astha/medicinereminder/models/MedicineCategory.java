@@ -1,25 +1,26 @@
 package com.singh.astha.medicinereminder.models;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class MedicineCategory extends BaseModel{
+public class MedicineCategory extends BaseModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY,targetEntity= Medicine.class)
+    @ManyToOne(targetEntity = Medicine.class)
     @JoinColumn(name = "medicine_id")
     private Long medicineId;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity= Category.class)
+    @ManyToOne(targetEntity = Category.class)
     @JoinColumn(name = "category_id")
     private Long categoryId;
 

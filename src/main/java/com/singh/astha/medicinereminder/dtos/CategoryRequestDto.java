@@ -1,17 +1,18 @@
 package com.singh.astha.medicinereminder.dtos;
 
-import io.micrometer.core.lang.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryRequest {
+public class CategoryRequestDto {
 
-    @NonNull
+    @NotNull
     private String name;
 }

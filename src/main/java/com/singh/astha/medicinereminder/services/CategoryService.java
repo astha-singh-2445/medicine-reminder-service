@@ -1,9 +1,10 @@
 package com.singh.astha.medicinereminder.services;
 
-import com.singh.astha.medicinereminder.dtos.CategoryRequest;
+import com.singh.astha.medicinereminder.dtos.CategoryRequestDto;
+import com.singh.astha.medicinereminder.dtos.CategoryResponseDto;
 
 public interface CategoryService {
 
-    Long addCategory(CategoryRequest categoryRequest, Long userName);
+    CategoryResponseDto addCategory(CategoryRequestDto categoryRequestDto, Long userName);
 
 }
