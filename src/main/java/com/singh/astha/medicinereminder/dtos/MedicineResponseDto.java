@@ -1,19 +1,16 @@
-package com.singh.astha.medicinereminder.models;
+package com.singh.astha.medicinereminder.dtos;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Builder
-public class Medicine extends BaseModel {
+public class MedicineResponseDto {
 
+    private Long id;
     private String name;
     private Integer currentDosage;
     private String medicineType;
-    private Long userId;
 }
