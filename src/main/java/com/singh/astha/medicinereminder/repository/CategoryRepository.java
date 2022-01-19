@@ -14,5 +14,5 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
 
     List<Category> findByUserIdAndDeleted(Long userId, Boolean deleted);
 
-    Category findByIdAndDeletedAndUserId(Long id, Boolean deleted, Long userId);
+    Optional<Category> findByIdAndDeletedAndUserId(Long id, Boolean deleted, Long userId);
 }

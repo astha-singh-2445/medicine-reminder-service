@@ -41,27 +41,27 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryResponseDto> listAllCategory(Long userId) {
         List<Category> categoryOptional = categoryRepository.findByUserIdAndDeleted(userId, false);
-        List<CategoryResponseDto> allCategoryList = categoryOptional.stream()
-                .map(category -> categoryDtoTransformer.convertCategoryToCategoryResponseDto(category))
+        return categoryOptional.stream()
+                .map(categoryDtoTransformer::convertCategoryToCategoryResponseDto)
                 .collect(Collectors.toList());
-        return allCategoryList;
     }
 
     @Override
     public Long deleteCategory(Long categoryId, Long userId) {
-        Category categoryOptional = categoryRepository.findByIdAndDeletedAndUserId(categoryId, false, userId);
-        if (categoryOptional == null) {
+        Optional<Category> categoryOptional = categoryRepository.findByIdAndDeletedAndUserId(categoryId, false, userId);
+        if (categoryOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not exist");
         }
-        categoryOptional.setDeleted(true);
-        Category deletedCategory = categoryRepository.save(categoryOptional);
+        Category category = categoryOptional.get();
+        category.setDeleted(true);
+        Category deletedCategory = categoryRepository.save(category);
         return deletedCategory.getId();
     }
 
     @Override
     public CategoryResponseDto updateCategory(Long categoryId, CategoryRequestDto categoryName, Long userId) {
-        Category categoryOptional = categoryRepository.findByIdAndDeletedAndUserId(categoryId, false, userId);
-        if (categoryOptional == null) {
+        Optional<Category> categoryOptional = categoryRepository.findByIdAndDeletedAndUserId(categoryId, false, userId);
+        if (categoryOptional.isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not exist");
         }
         Category category = categoryDtoTransformer.convertCategoryRequestDtoToCategory(categoryName, userId);

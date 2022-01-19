@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface MedicineRepository extends CrudRepository<Medicine, Long> {
 
     Optional<Medicine> findByName(String name);
+
+    Optional<Medicine> findByIdAndDeletedAndUserId(Long medicineId, boolean b, Long userId);
 }
