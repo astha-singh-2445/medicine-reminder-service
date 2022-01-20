@@ -6,7 +6,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -30,14 +29,19 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader != null) {
-            JwtPayload jwtPayload = jwtService.verifyAndDecodeToken(authorizationHeader);
-            User user = new User(jwtPayload.getUserId().toString(), UUID.randomUUID().toString(),
-                    jwtPayload.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        try {
+            String authorizationHeader = request.getHeader("Authorization");
+            if (authorizationHeader != null) {
+
+                JwtPayload jwtPayload = jwtService.verifyAndDecodeToken(authorizationHeader);
+                User user = new User(jwtPayload.getUserId().toString(), UUID.randomUUID().toString(),
+                        jwtPayload.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            }
+        } catch (Exception e) {
+
         }
         filterChain.doFilter(request, response);
     }
