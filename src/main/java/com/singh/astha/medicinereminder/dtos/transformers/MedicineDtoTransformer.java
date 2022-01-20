@@ -3,7 +3,6 @@ package com.singh.astha.medicinereminder.dtos.transformers;
 import com.singh.astha.medicinereminder.dtos.MedicineRequestDto;
 import com.singh.astha.medicinereminder.dtos.MedicineResponseDto;
 import com.singh.astha.medicinereminder.models.Medicine;
-import com.singh.astha.medicinereminder.utils.Common;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,9 +14,6 @@ public class MedicineDtoTransformer {
         medicine.setCurrentDosage(medicineRequestDto.getCurrentDosage());
         medicine.setMedicineType(medicineRequestDto.getMedicineType());
         medicine.setUserId(userId);
-        medicine.setDeleted(false);
-        medicine.setTimeCreated(Common.getOffsetDateTime());
-        medicine.setTimeLastModified(Common.getOffsetDateTime());
         return medicine;
     }
 

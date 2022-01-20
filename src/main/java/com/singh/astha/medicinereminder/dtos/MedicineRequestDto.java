@@ -22,4 +22,5 @@ public class MedicineRequestDto {
     @Min(0)
     private Integer currentDosage;
     private String medicineType;
+    private Long categoryId;
 }
