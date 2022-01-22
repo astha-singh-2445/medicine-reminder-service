@@ -2,6 +2,7 @@ package com.singh.astha.medicinereminder.config;
 
 import com.singh.astha.medicinereminder.dtos.JwtPayload;
 import com.singh.astha.medicinereminder.services.JwtService;
+import com.singh.astha.medicinereminder.utils.Constants;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,15 +29,22 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader != null) {
-            JwtPayload jwtPayload = jwtService.verifyAndDecodeToken(authorizationHeader);
-            User user = new User(jwtPayload.getUserId().toString(), UUID.randomUUID().toString(),
-                    jwtPayload.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+        try {
+            String authorizationHeader = request.getHeader(Constants.AUTHORIZATION);
+            if (authorizationHeader != null) {
+
+                JwtPayload jwtPayload = jwtService.verifyAndDecodeToken(authorizationHeader);
+                User user = new User(jwtPayload.getUserId().toString(), UUID.randomUUID().toString(),
+                        jwtPayload.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                        user, null, user.getAuthorities());
+                usernamePasswordAuthenticationToken.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            }
+        } catch (Exception e) {
         }
         filterChain.doFilter(request, response);
     }

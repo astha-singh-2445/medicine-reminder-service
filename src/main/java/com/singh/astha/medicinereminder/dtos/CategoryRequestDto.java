@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -13,6 +13,6 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 public class CategoryRequestDto {
 
-    @NotEmpty
+    @NotBlank
     private String name;
 }

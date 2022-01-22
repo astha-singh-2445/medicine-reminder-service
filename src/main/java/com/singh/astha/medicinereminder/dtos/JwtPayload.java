@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class JwtPayload {
+
     private Long userId;
     private List<String> roles;
 }
