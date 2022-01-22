@@ -1,4 +1,4 @@
-package com.singh.astha.medicinereminder.exception;
+package com.singh.astha.medicinereminder.exceptions;
 
 import lombok.Getter;
 

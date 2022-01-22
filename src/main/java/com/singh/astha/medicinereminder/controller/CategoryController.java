@@ -2,6 +2,7 @@ package com.singh.astha.medicinereminder.controller;
 
 import com.singh.astha.medicinereminder.dtos.CategoryRequestDto;
 import com.singh.astha.medicinereminder.dtos.CategoryResponseDto;
+import com.singh.astha.medicinereminder.dtos.ResponseWrapper;
 import com.singh.astha.medicinereminder.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,10 +27,11 @@ public class CategoryController {
     }
 
     @PostMapping()
-    public ResponseEntity<CategoryResponseDto> addCategory(Authentication authentication,
-                                                           @RequestBody @Valid CategoryRequestDto categoryRequestDto) {
+    public ResponseEntity<ResponseWrapper<CategoryResponseDto>> addCategory(Authentication authentication,
+                                                                            @RequestBody @Valid CategoryRequestDto categoryRequestDto) {
         Long userId = Long.valueOf(authentication.getName());
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.addCategory(categoryRequestDto, userId));
+        CategoryResponseDto categoryResponseDto = categoryService.addCategory(categoryRequestDto, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseWrapper.success(categoryResponseDto));
     }
 
 }

@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.singh.astha.medicinereminder.dtos.JwtPayload;
-import com.singh.astha.medicinereminder.exception.ResponseException;
+import com.singh.astha.medicinereminder.exceptions.ResponseException;
 import com.singh.astha.medicinereminder.services.JwtService;
 import com.singh.astha.medicinereminder.utils.AppProperties;
 import com.singh.astha.medicinereminder.utils.Constants;

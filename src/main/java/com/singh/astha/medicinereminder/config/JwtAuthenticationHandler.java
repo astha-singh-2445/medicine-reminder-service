@@ -1,8 +1,8 @@
 package com.singh.astha.medicinereminder.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.singh.astha.medicinereminder.dtos.ResponseWrapperDto;
-import com.singh.astha.medicinereminder.exception.ResponseException;
+import com.singh.astha.medicinereminder.dtos.ResponseWrapper;
+import com.singh.astha.medicinereminder.exceptions.ResponseException;
 import com.singh.astha.medicinereminder.services.JwtService;
 import com.singh.astha.medicinereminder.utils.Constants;
 import com.singh.astha.medicinereminder.utils.ErrorMessages;
@@ -34,24 +34,24 @@ public class JwtAuthenticationHandler implements AuthenticationEntryPoint {
             String authorizationHeader = request.getHeader(Constants.AUTHORIZATION);
             if (authorizationHeader == null) {
                 writeResponse(response, HttpStatus.BAD_REQUEST.value(),
-                        ResponseWrapperDto.failure(null, ErrorMessages.AUTHORIZATION_HEADER_MUST_BE_PRESENT)
+                        ResponseWrapper.failure(null, ErrorMessages.AUTHORIZATION_HEADER_MUST_BE_PRESENT)
                 );
                 return;
             }
             jwtService.verifyAndDecodeToken(authorizationHeader);
         } catch (ResponseException responseException) {
             writeResponse(response, responseException.getStatus(),
-                    ResponseWrapperDto.failure(responseException.getPayload(), responseException.getMessage())
+                    ResponseWrapper.failure(responseException.getPayload(), responseException.getMessage())
             );
             return;
         }
         writeResponse(response, HttpStatus.FORBIDDEN.value(),
-                ResponseWrapperDto.failure(null, ErrorMessages.ACCESS_DENIED));
+                ResponseWrapper.failure(null, ErrorMessages.ACCESS_DENIED));
     }
 
     private <T> void writeResponse(HttpServletResponse response, Integer httpStatus,
-                                   ResponseWrapperDto<T> responseWrapperDto) throws IOException {
+                                   ResponseWrapper<T> responseWrapper) throws IOException {
         response.setStatus(httpStatus);
-        response.getWriter().println(objectMapper.writeValueAsString(responseWrapperDto));
+        response.getWriter().println(objectMapper.writeValueAsString(responseWrapper));
     }
 }

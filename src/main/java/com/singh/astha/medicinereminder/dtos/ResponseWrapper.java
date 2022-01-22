@@ -8,7 +8,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ResponseWrapperDto<T> {
+public class ResponseWrapper<T> {
 
     private boolean success;
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -16,19 +16,19 @@ public class ResponseWrapperDto<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String message;
 
-    public static <T> ResponseWrapperDto<T> success(T payload, String message) {
-        return new ResponseWrapperDto<>(true, payload, message);
+    public static <T> ResponseWrapper<T> success(T payload, String message) {
+        return new ResponseWrapper<>(true, payload, message);
     }
 
-    public static <T> ResponseWrapperDto<T> success(T payload) {
+    public static <T> ResponseWrapper<T> success(T payload) {
         return success(payload, null);
     }
 
-    public static <T> ResponseWrapperDto<T> failure(T payload, String message) {
-        return new ResponseWrapperDto<>(false, payload, message);
+    public static <T> ResponseWrapper<T> failure(T payload, String message) {
+        return new ResponseWrapper<>(false, payload, message);
     }
 
-    public static <T> ResponseWrapperDto<T> failure(T payload) {
+    public static <T> ResponseWrapper<T> failure(T payload) {
         return failure(payload, null);
     }
 }
