@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter
 public class AppProperties {
+
     @Value("${auth.token.public.key}")
     private String publicKey;
 }

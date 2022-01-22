@@ -5,12 +5,14 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.singh.astha.medicinereminder.dtos.JwtPayload;
+import com.singh.astha.medicinereminder.exception.ResponseException;
 import com.singh.astha.medicinereminder.services.JwtService;
 import com.singh.astha.medicinereminder.utils.AppProperties;
+import com.singh.astha.medicinereminder.utils.Constants;
+import com.singh.astha.medicinereminder.utils.ErrorMessages;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPublicKey;
@@ -42,18 +44,19 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public JwtPayload verifyAndDecodeToken(String authHeader) {
-        if (authHeader.startsWith("Bearer ")) {
+        if (authHeader.startsWith(Constants.BEARER)) {
             try {
                 String jwt = authHeader.substring(7);
                 DecodedJWT decodedJWT = jwtVerifier.verify(jwt);
                 return JwtPayload.builder()
-                        .userId(decodedJWT.getClaim("userId").asLong())
-                        .roles(decodedJWT.getClaim("roles").asList(String.class))
+                        .userId(decodedJWT.getClaim(Constants.USER_ID).asLong())
+                        .roles(decodedJWT.getClaim(Constants.ROLES).asList(String.class))
                         .build();
             } catch (Exception e) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Token");
+                throw new ResponseException(HttpStatus.UNAUTHORIZED.value(), ErrorMessages.INVALID_TOKEN);
             }
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Authorization Header must not be null and must start be Bearer");
+        throw new ResponseException(HttpStatus.BAD_REQUEST.value(),
+                ErrorMessages.AUTHORIZATION_HEADER_MUST_NOT_BE_NULL_AND_MUST_START_BE_BEARER);
     }
 }

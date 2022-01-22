@@ -3,13 +3,14 @@ package com.singh.astha.medicinereminder.services.impl;
 import com.singh.astha.medicinereminder.dtos.CategoryRequestDto;
 import com.singh.astha.medicinereminder.dtos.CategoryResponseDto;
 import com.singh.astha.medicinereminder.dtos.transformers.CategoryDtoTransformer;
+import com.singh.astha.medicinereminder.exception.ResponseException;
 import com.singh.astha.medicinereminder.models.Category;
 import com.singh.astha.medicinereminder.repository.CategoryRepository;
 import com.singh.astha.medicinereminder.services.CategoryService;
+import com.singh.astha.medicinereminder.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryDtoTransformer.convertCategoryRequestDtoToCategory(categoryRequestDto, userName);
         Optional<Category> categoryOptional = categoryRepository.findByName(categoryRequestDto.getName());
         if (categoryOptional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Same Category is already exist");
+            throw new ResponseException(HttpStatus.BAD_REQUEST.value(), Constants.SAME_CATEGORY_IS_ALREADY_EXIST);
         }
         Category savedCategory = categoryRepository.save(category);
         return categoryDtoTransformer.convertCategoryToCategoryResponseDto(savedCategory);
