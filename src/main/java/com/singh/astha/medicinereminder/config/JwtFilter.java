@@ -1,6 +1,6 @@
 package com.singh.astha.medicinereminder.config;
 
-import com.singh.astha.medicinereminder.dtos.JwtPayload;
+import com.singh.astha.medicinereminder.internal.JwtPayload;
 import com.singh.astha.medicinereminder.services.JwtService;
 import com.singh.astha.medicinereminder.utils.Constants;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

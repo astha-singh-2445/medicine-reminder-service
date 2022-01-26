@@ -1,10 +1,8 @@
 package com.singh.astha.medicinereminder.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Getter
@@ -12,10 +10,14 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 public class Medicine extends BaseModel {
 
     private String name;
     private Integer currentDosage;
     private String medicineType;
     private Long userId;
+
+    @Column(columnDefinition = "json")
+    private String meta;
 }

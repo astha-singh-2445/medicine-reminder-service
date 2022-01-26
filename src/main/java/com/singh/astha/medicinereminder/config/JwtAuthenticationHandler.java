@@ -1,7 +1,7 @@
 package com.singh.astha.medicinereminder.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.singh.astha.medicinereminder.dtos.ResponseWrapper;
+import com.singh.astha.medicinereminder.dtos.ResponseDto.ResponseWrapper;
 import com.singh.astha.medicinereminder.exceptions.ResponseException;
 import com.singh.astha.medicinereminder.services.JwtService;
 import com.singh.astha.medicinereminder.utils.Constants;
@@ -40,7 +40,7 @@ public class JwtAuthenticationHandler implements AuthenticationEntryPoint {
             }
             jwtService.verifyAndDecodeToken(authorizationHeader);
         } catch (ResponseException responseException) {
-            writeResponse(response, responseException.getStatus(),
+            writeResponse(response, responseException.getStatus().value(),
                     ResponseWrapper.failure(responseException.getPayload(), responseException.getMessage())
             );
             return;
@@ -49,7 +49,7 @@ public class JwtAuthenticationHandler implements AuthenticationEntryPoint {
                 ResponseWrapper.failure(null, ErrorMessages.ACCESS_DENIED));
     }
 
-    private <T> void writeResponse(HttpServletResponse response, Integer httpStatus,
+    private <T> void writeResponse(HttpServletResponse response, int httpStatus,
                                    ResponseWrapper<T> responseWrapper) throws IOException {
         response.setStatus(httpStatus);
         response.getWriter().println(objectMapper.writeValueAsString(responseWrapper));

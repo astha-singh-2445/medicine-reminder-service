@@ -1,13 +1,9 @@
 package com.singh.astha.medicinereminder.dtos.transformers;
 
-import com.singh.astha.medicinereminder.dtos.CategoryRequestDto;
-import com.singh.astha.medicinereminder.dtos.CategoryResponseDto;
+import com.singh.astha.medicinereminder.dtos.RequestDto.CategoryRequestDto;
+import com.singh.astha.medicinereminder.dtos.ResponseDto.CategoryResponseDto;
 import com.singh.astha.medicinereminder.models.Category;
 import org.springframework.stereotype.Component;
-
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.Date;
 
 @Component
 public class CategoryDtoTransformer {
@@ -16,12 +12,6 @@ public class CategoryDtoTransformer {
         Category category = new Category();
         category.setName(categoryRequestDto.getName());
         category.setUserId(userName);
-        category.setDeleted(false);
-        Date date = new Date();
-        OffsetDateTime offsetDateTime = date.toInstant()
-                .atOffset(ZoneOffset.UTC);
-        category.setTimeCreated(offsetDateTime);
-        category.setTimeLastModified(offsetDateTime);
         return category;
     }
 
