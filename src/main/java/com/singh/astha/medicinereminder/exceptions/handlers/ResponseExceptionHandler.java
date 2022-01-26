@@ -1,6 +1,6 @@
 package com.singh.astha.medicinereminder.exceptions.handlers;
 
-import com.singh.astha.medicinereminder.dtos.ResponseWrapper;
+import com.singh.astha.medicinereminder.dtos.ResponseDto.ResponseWrapper;
 import com.singh.astha.medicinereminder.exceptions.ResponseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +17,6 @@ public class ResponseExceptionHandler {
                                                           ResponseException exception) {
         ResponseWrapper<Object> responseWrapper = ResponseWrapper.failure(exception.getPayload(),
                 exception.getMessage());
-        return new ResponseEntity<>(responseWrapper, HttpStatus.valueOf(exception.getStatus()));
+        return new ResponseEntity<>(responseWrapper, exception.getStatus());
     }
 }

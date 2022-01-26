@@ -1,4 +1,4 @@
-package com.singh.astha.medicinereminder.dtos;
+package com.singh.astha.medicinereminder.dtos.RequestDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -15,12 +16,11 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class MedicineRequestDto {
 
-    @NotEmpty
+    @NotBlank
     private String name;
 
     @NotNull
     @Min(0)
     private Integer currentDosage;
     private String medicineType;
-    private Long categoryId;
 }

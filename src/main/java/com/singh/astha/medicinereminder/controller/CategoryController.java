@@ -1,8 +1,8 @@
 package com.singh.astha.medicinereminder.controller;
 
-import com.singh.astha.medicinereminder.dtos.CategoryRequestDto;
-import com.singh.astha.medicinereminder.dtos.CategoryResponseDto;
-import com.singh.astha.medicinereminder.dtos.ResponseWrapper;
+import com.singh.astha.medicinereminder.dtos.RequestDto.CategoryRequestDto;
+import com.singh.astha.medicinereminder.dtos.ResponseDto.CategoryResponseDto;
+import com.singh.astha.medicinereminder.dtos.ResponseDto.ResponseWrapper;
 import com.singh.astha.medicinereminder.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,22 +33,31 @@ public class CategoryController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<CategoryResponseDto>> listAllCategory(Authentication authentication) {
+    public ResponseEntity<ResponseWrapper<List<CategoryResponseDto>>> listAllCategory(Authentication authentication,
+                                                                                      @RequestParam(defaultValue = "0") Integer page,
+                                                                                      @RequestParam(defaultValue =
+                                                                                              "50") Integer pageSize
+    ) {
         Long userId = Long.valueOf(authentication.getName());
-        return ResponseEntity.status(HttpStatus.OK).body(categoryService.listAllCategory(userId));
+        List<CategoryResponseDto> categoryResponseDtos = categoryService.listAllCategory(page, pageSize, userId);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(categoryResponseDtos));
     }
 
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity<Long> deleteCategory(Authentication authentication, @PathVariable Long categoryId) {
+    public ResponseEntity<ResponseWrapper<Object>> deleteCategory(Authentication authentication,
+                                                                @PathVariable Long categoryId) {
         Long userId = Long.valueOf(authentication.getName());
-        return ResponseEntity.status(HttpStatus.OK).body(categoryService.deleteCategory(categoryId, userId));
+        categoryService.deleteCategory(categoryId, userId);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(null));
     }
 
     @PutMapping("/{categoryId}")
-    public ResponseEntity<CategoryResponseDto> updateCategory(Authentication authentication, @PathVariable Long categoryId,
-                                                              @RequestBody CategoryRequestDto categoryRequestDto) {
+    public ResponseEntity<ResponseWrapper<CategoryResponseDto>> updateCategory(Authentication authentication,
+                                                                               @PathVariable Long categoryId,
+                                                                              @Valid @RequestBody CategoryRequestDto categoryRequestDto) {
         Long userId = Long.valueOf(authentication.getName());
-        return ResponseEntity.status(HttpStatus.OK).body(categoryService.updateCategory(categoryId, categoryRequestDto,
-                userId));
+        CategoryResponseDto categoryResponseDto = categoryService.updateCategory(categoryId, categoryRequestDto,
+                userId);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(categoryResponseDto));
     }
 }

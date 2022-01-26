@@ -1,19 +1,24 @@
 package com.singh.astha.medicinereminder.services.impl;
 
-import com.singh.astha.medicinereminder.dtos.CategoryRequestDto;
-import com.singh.astha.medicinereminder.dtos.CategoryResponseDto;
+import com.singh.astha.medicinereminder.dtos.RequestDto.CategoryRequestDto;
+import com.singh.astha.medicinereminder.dtos.ResponseDto.CategoryResponseDto;
 import com.singh.astha.medicinereminder.dtos.transformers.CategoryDtoTransformer;
 import com.singh.astha.medicinereminder.exceptions.ResponseException;
 import com.singh.astha.medicinereminder.models.Category;
 import com.singh.astha.medicinereminder.repository.CategoryRepository;
 import com.singh.astha.medicinereminder.services.CategoryService;
 import com.singh.astha.medicinereminder.utils.ErrorMessages;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,41 +36,53 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponseDto addCategory(CategoryRequestDto categoryRequestDto, Long userName) {
         Category category = categoryDtoTransformer.convertCategoryRequestDtoToCategory(categoryRequestDto, userName);
-        Optional<Category> categoryOptional = categoryRepository.findByName(categoryRequestDto.getName());
+        Optional<Category> categoryOptional = categoryRepository.findByUserIdAndName(userName,
+                categoryRequestDto.getName());
         if (categoryOptional.isPresent()) {
-            throw new ResponseException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.SAME_CATEGORY_IS_ALREADY_EXIST);
+            throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.SAME_CATEGORY_IS_ALREADY_EXIST);
         }
         Category savedCategory = categoryRepository.save(category);
         return categoryDtoTransformer.convertCategoryToCategoryResponseDto(savedCategory);
     }
 
     @Override
-    public List<CategoryResponseDto> listAllCategory(Long userId) {
-        List<Category> categoryOptional = categoryRepository.findByUserIdAndDeleted(userId, false);
-        return categoryOptional.stream()
+    public List<CategoryResponseDto> listAllCategory(int page, int pageSize, Long userId) {
+        Page<Category> categoryPage = categoryRepository.findByUserIdAndDeleted(PageRequest.of(page, pageSize,
+                        Sort.by("id")), userId, false
+        );
+        return categoryPage.stream()
                 .map(categoryDtoTransformer::convertCategoryToCategoryResponseDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Long deleteCategory(Long categoryId, Long userId) {
-        Optional<Category> categoryOptional = categoryRepository.findByIdAndDeletedAndUserId(categoryId, false, userId);
+    public void deleteCategory(Long categoryId, Long userId) {
+        Optional<Category> categoryOptional = categoryRepository.findByIdAndUserIdAndDeleted(categoryId, userId, false);
         if (categoryOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not exist");
+            return;
         }
         Category category = categoryOptional.get();
+        JSONObject meta = category.getMeta() == null ?new JSONObject() : new JSONObject(category.getMeta());
+        meta.put("name", category.getName());
+        category.setName(UUID.randomUUID().toString());
+        category.setMeta(meta.toString());
         category.setDeleted(true);
-        Category deletedCategory = categoryRepository.save(category);
-        return deletedCategory.getId();
+        categoryRepository.save(category);
     }
 
     @Override
-    public CategoryResponseDto updateCategory(Long categoryId, CategoryRequestDto categoryName, Long userId) {
-        Optional<Category> categoryOptional = categoryRepository.findByIdAndDeletedAndUserId(categoryId, false, userId);
-        if (categoryOptional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not exist");
+    public CategoryResponseDto updateCategory(Long categoryId, CategoryRequestDto categoryRequestDto, Long userId) {
+        Optional<Category> categoryOptional = categoryRepository.findByIdAndUserIdAndDeleted(categoryId, userId, false);
+        if (categoryOptional.isEmpty()) {
+            throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.CATEGORY_NOT_EXIST);
         }
-        Category category = categoryDtoTransformer.convertCategoryRequestDtoToCategory(categoryName, userId);
+        Optional<Category> categoryOptionalByName = categoryRepository.findByUserIdAndName(userId,
+                categoryRequestDto.getName());
+        if (categoryOptionalByName.isPresent()) {
+            throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.SAME_CATEGORY_IS_ALREADY_EXIST);
+        }
+        Category category = categoryOptional.get();
+        category.setName(categoryRequestDto.getName());
         Category updatedCategory = categoryRepository.save(category);
         return categoryDtoTransformer.convertCategoryToCategoryResponseDto(updatedCategory);
     }

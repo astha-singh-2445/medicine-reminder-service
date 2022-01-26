@@ -1,7 +1,7 @@
 package com.singh.astha.medicinereminder.services;
 
-import com.singh.astha.medicinereminder.dtos.CategoryRequestDto;
-import com.singh.astha.medicinereminder.dtos.CategoryResponseDto;
+import com.singh.astha.medicinereminder.dtos.RequestDto.CategoryRequestDto;
+import com.singh.astha.medicinereminder.dtos.ResponseDto.CategoryResponseDto;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -11,9 +11,9 @@ public interface CategoryService {
 
     CategoryResponseDto addCategory(CategoryRequestDto categoryRequestDto, Long userName);
 
-    List<CategoryResponseDto> listAllCategory(Long userId);
+    List<CategoryResponseDto> listAllCategory(int page, int pageSize, Long userId);
 
-    Long deleteCategory(Long categoryId, Long userId);
+    void deleteCategory(Long categoryId, Long userId);
 
     CategoryResponseDto updateCategory(Long categoryId, CategoryRequestDto categoryName, Long aLong);
 

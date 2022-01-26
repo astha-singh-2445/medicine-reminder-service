@@ -1,7 +1,7 @@
 package com.singh.astha.medicinereminder.dtos.transformers;
 
-import com.singh.astha.medicinereminder.dtos.CategoryRequestDto;
-import com.singh.astha.medicinereminder.dtos.CategoryResponseDto;
+import com.singh.astha.medicinereminder.dtos.RequestDto.CategoryRequestDto;
+import com.singh.astha.medicinereminder.dtos.ResponseDto.CategoryResponseDto;
 import com.singh.astha.medicinereminder.models.Category;
 import org.springframework.stereotype.Component;
 

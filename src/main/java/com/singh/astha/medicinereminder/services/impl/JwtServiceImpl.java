@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.singh.astha.medicinereminder.dtos.JwtPayload;
+import com.singh.astha.medicinereminder.internal.JwtPayload;
 import com.singh.astha.medicinereminder.exceptions.ResponseException;
 import com.singh.astha.medicinereminder.services.JwtService;
 import com.singh.astha.medicinereminder.utils.AppProperties;
@@ -53,10 +53,10 @@ public class JwtServiceImpl implements JwtService {
                         .roles(decodedJWT.getClaim(Constants.ROLES).asList(String.class))
                         .build();
             } catch (Exception e) {
-                throw new ResponseException(HttpStatus.UNAUTHORIZED.value(), ErrorMessages.INVALID_TOKEN);
+                throw new ResponseException(HttpStatus.UNAUTHORIZED, ErrorMessages.INVALID_TOKEN);
             }
         }
-        throw new ResponseException(HttpStatus.BAD_REQUEST.value(),
+        throw new ResponseException(HttpStatus.BAD_REQUEST,
                 ErrorMessages.AUTHORIZATION_HEADER_MUST_NOT_BE_NULL_AND_MUST_START_BE_BEARER);
     }
 }

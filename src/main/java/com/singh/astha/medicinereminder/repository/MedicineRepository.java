@@ -12,7 +12,7 @@ public interface MedicineRepository extends CrudRepository<Medicine, Long> {
 
     Optional<Medicine> findByName(String name);
 
-    Optional<Medicine> findByIdAndDeletedAndUserId(Long medicineId, boolean b, Long userId);
+    Optional<Medicine> findByIdAndUserIdAndDeleted(Long medicineId, Long userId, boolean deleted);
 
     List<Medicine> findByUserIdAndDeleted(Long userId, Boolean deleted);
 }

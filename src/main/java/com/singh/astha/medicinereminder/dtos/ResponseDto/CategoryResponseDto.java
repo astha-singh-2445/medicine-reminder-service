@@ -1,4 +1,4 @@
-package com.singh.astha.medicinereminder.dtos;
+package com.singh.astha.medicinereminder.dtos.ResponseDto;
 
 import lombok.*;
 

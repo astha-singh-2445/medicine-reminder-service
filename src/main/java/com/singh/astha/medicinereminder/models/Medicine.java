@@ -2,6 +2,7 @@ package com.singh.astha.medicinereminder.models;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Getter
@@ -16,4 +17,7 @@ public class Medicine extends BaseModel {
     private Integer currentDosage;
     private String medicineType;
     private Long userId;
+
+    @Column(columnDefinition = "json")
+    private String meta;
 }
