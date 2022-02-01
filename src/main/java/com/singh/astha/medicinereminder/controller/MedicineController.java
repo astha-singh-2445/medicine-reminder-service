@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/medicine")
@@ -42,10 +43,41 @@ public class MedicineController {
     }
 
     @GetMapping()
-    public ResponseEntity<ResponseWrapper<List<MedicineResponseDto>>> listAllMedicine(Authentication authentication) {
+    public ResponseEntity<ResponseWrapper<List<MedicineResponseDto>>> listAllMedicine(Authentication authentication,
+                                                                                      @RequestParam(defaultValue = "0") Integer page,
+                                                                                      @RequestParam(defaultValue = "50") Integer pageSize,
+                                                                                      @RequestParam(required = false) Long categoryId) {
         Long userId = Long.valueOf(authentication.getName());
-        List<MedicineResponseDto> medicineResponseDtos = medicineService.listAllMedicine(userId);
+        List<MedicineResponseDto> medicineResponseDtos = medicineService.listAllMedicine(userId, page, pageSize,
+                categoryId);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(medicineResponseDtos));
+    }
+
+    @PutMapping("/{medicineId}/category")
+    public ResponseEntity<ResponseWrapper<Object>> updateCategoryOfMedicine(Authentication authentication,
+                                                                            @PathVariable Long medicineId,
+                                                                            @RequestParam Set<Long> categoriesId) {
+        Long userId = Long.valueOf(authentication.getName());
+        medicineService.updateCategoryOfMedicine(userId,medicineId,categoriesId);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(null));
+    }
+
+    @GetMapping("/{medicineId}")
+    public ResponseEntity<ResponseWrapper<MedicineResponseDto>> getMedicine(Authentication authentication ,
+                                                               @PathVariable Long medicineId,
+                                                               @RequestParam(defaultValue = "false") boolean fetchCategories){
+        Long userId = Long.valueOf(authentication.getName());
+        MedicineResponseDto medicineResponseDto = medicineService.getMedicine(userId, medicineId, fetchCategories);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(medicineResponseDto));
+
+    }
+
+    @DeleteMapping("/{medicineId}")
+    public ResponseEntity<ResponseWrapper<Object>> deleteCategory(Authentication authentication,
+                                                                  @PathVariable Long medicineId) {
+        Long userId = Long.valueOf(authentication.getName());
+        medicineService.deleteMedicine(medicineId, userId);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(null));
     }
 
 }

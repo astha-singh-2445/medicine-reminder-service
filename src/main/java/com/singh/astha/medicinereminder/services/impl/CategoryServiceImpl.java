@@ -7,6 +7,7 @@ import com.singh.astha.medicinereminder.exceptions.ResponseException;
 import com.singh.astha.medicinereminder.models.Category;
 import com.singh.astha.medicinereminder.repository.CategoryRepository;
 import com.singh.astha.medicinereminder.services.CategoryService;
+import com.singh.astha.medicinereminder.utils.Constants;
 import com.singh.astha.medicinereminder.utils.ErrorMessages;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
         Category category = categoryOptional.get();
         JSONObject meta = category.getMeta() == null ?new JSONObject() : new JSONObject(category.getMeta());
-        meta.put("name", category.getName());
+        meta.put(Constants.NAME, category.getName());
         category.setName(UUID.randomUUID().toString());
         category.setMeta(meta.toString());
         category.setDeleted(true);
