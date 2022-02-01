@@ -58,14 +58,14 @@ public class MedicineController {
                                                                             @PathVariable Long medicineId,
                                                                             @RequestParam Set<Long> categoriesId) {
         Long userId = Long.valueOf(authentication.getName());
-        medicineService.updateCategoryOfMedicine(userId,medicineId,categoriesId);
+        medicineService.updateCategoryOfMedicine(userId, medicineId, categoriesId);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(null));
     }
 
     @GetMapping("/{medicineId}")
-    public ResponseEntity<ResponseWrapper<MedicineResponseDto>> getMedicine(Authentication authentication ,
-                                                               @PathVariable Long medicineId,
-                                                               @RequestParam(defaultValue = "false") boolean fetchCategories){
+    public ResponseEntity<ResponseWrapper<MedicineResponseDto>> getMedicine(Authentication authentication,
+                                                                            @PathVariable Long medicineId,
+                                                                            @RequestParam(defaultValue = "false") boolean fetchCategories) {
         Long userId = Long.valueOf(authentication.getName());
         MedicineResponseDto medicineResponseDto = medicineService.getMedicine(userId, medicineId, fetchCategories);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(medicineResponseDto));

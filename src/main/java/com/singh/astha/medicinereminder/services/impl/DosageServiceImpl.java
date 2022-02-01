@@ -40,13 +40,12 @@ public class DosageServiceImpl implements DosageService {
             throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.MEDICINE_NOT_EXIST);
         }
         Medicine medicine = optionalMedicine.get();
-        if(dosageHistory.getType()==DosageType.CONSUMPTION) {
-            if(medicine.getCurrentDosage()< dosageHistoryRequestDto.getDosage()){
+        if (dosageHistory.getType() == DosageType.CONSUMPTION) {
+            if (medicine.getCurrentDosage() < dosageHistoryRequestDto.getDosage()) {
                 throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.MEDICINE_IS_NOT_SUFFICIENT);
             }
             medicine.setCurrentDosage(medicine.getCurrentDosage() - dosageHistory.getDosage());
-        }
-        else if(dosageHistory.getType()==DosageType.REFILL){
+        } else if (dosageHistory.getType() == DosageType.REFILL) {
             medicine.setCurrentDosage(medicine.getCurrentDosage() + dosageHistory.getDosage());
         }
         medicine = medicineRepository.save(medicine);

@@ -26,7 +26,7 @@ public class MedicineDtoTransformer {
                 .build();
     }
 
-    public void copyProperties(Medicine medicine, MedicineRequestDto medicineRequestDto){
+    public void copyProperties(Medicine medicine, MedicineRequestDto medicineRequestDto) {
         medicine.setName(medicineRequestDto.getName());
         medicine.setMedicineType(medicineRequestDto.getMedicineType());
         medicine.setCurrentDosage(medicineRequestDto.getCurrentDosage());

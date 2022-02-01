@@ -68,7 +68,7 @@ public class MedicineServiceImpl implements MedicineService {
             throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.MEDICINE_NOT_EXIST);
         }
         Medicine medicine = optionalMedicine.get();
-       medicineDtoTransformer.copyProperties(medicine,medicineRequestDto);
+        medicineDtoTransformer.copyProperties(medicine, medicineRequestDto);
         Medicine updatedMedicine = medicineRepository.save(medicine);
         return medicineDtoTransformer.convertMedicineToMedicineResponseDto(updatedMedicine);
     }
@@ -91,19 +91,18 @@ public class MedicineServiceImpl implements MedicineService {
         }
 
         List<Category> allCategories = categoryRepository.findAll(userId, categoriesId);
-        if(allCategories.size()!=categoriesId.size()){
+        if (allCategories.size() != categoriesId.size()) {
             throw new ResponseException(HttpStatus.BAD_REQUEST, "Error");
         }
 
         List<MedicineCategory> medicineCategoryList = medicineCategoryRepository.findByMedicineId(medicineId);
-        for(MedicineCategory medicineCategory : medicineCategoryList){
-            if(categoriesId.contains(medicineCategory.getCategory().getId()) ){
-                if(Boolean.TRUE.equals(medicineCategory.getDeleted())){
+        for (MedicineCategory medicineCategory : medicineCategoryList) {
+            if (categoriesId.contains(medicineCategory.getCategory().getId())) {
+                if (Boolean.TRUE.equals(medicineCategory.getDeleted())) {
                     medicineCategory.setDeleted(false);
                 }
                 categoriesId.remove(medicineCategory.getCategory().getId());
-            }
-            else {
+            } else {
                 medicineCategory.setDeleted(true);
             }
         }
@@ -148,7 +147,7 @@ public class MedicineServiceImpl implements MedicineService {
             return;
         }
         Medicine medicine = optionalMedicine.get();
-        JSONObject meta = medicine.getMeta() == null ?new JSONObject() : new JSONObject(medicine.getMeta());
+        JSONObject meta = medicine.getMeta() == null ? new JSONObject() : new JSONObject(medicine.getMeta());
         meta.put(Constants.NAME, medicine.getName());
         medicine.setName(UUID.randomUUID().toString());
         medicine.setMeta(meta.toString());

@@ -11,6 +11,6 @@ public class ErrorMessages {
     public static final String SAME_MEDICINE_IS_ALREADY_EXIST = "Same Medicine already exists";
     public static final String CATEGORY_DOESN_T_EXIST = "Category doesn't exist";
     public static final String MEDICINE_NOT_EXIST = "Medicine does not exist";
-    public static final String MEDICINE_IS_NOT_SUFFICIENT = "Medicine balance is not sufficient" ;
+    public static final String MEDICINE_IS_NOT_SUFFICIENT = "Medicine balance is not sufficient";
 }
 

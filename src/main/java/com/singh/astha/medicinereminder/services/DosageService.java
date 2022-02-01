@@ -6,5 +6,6 @@ import javax.transaction.Transactional;
 
 @Transactional
 public interface DosageService {
+
     void consumeMedicine(Long userId, DosageHistoryRequestDto dosageHistoryRequestDto);
 }

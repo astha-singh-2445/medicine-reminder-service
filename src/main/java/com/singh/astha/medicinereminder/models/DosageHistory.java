@@ -15,7 +15,7 @@ public class DosageHistory extends BaseModel {
 
     private Integer dosage;
 
-    @Enumerated(value= EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private DosageType type;
 
     @ManyToOne(targetEntity = Medicine.class)

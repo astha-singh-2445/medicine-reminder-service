@@ -6,7 +6,10 @@ import com.singh.astha.medicinereminder.services.DosageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/dosage")
@@ -20,7 +23,7 @@ public class DosageController {
 
     @PostMapping("/consume")
     public ResponseEntity<ResponseWrapper<Object>> consumeMedicine(Authentication authentication,
-                                                                   @RequestBody DosageHistoryRequestDto dosageHistoryRequestDto){
+                                                                   @RequestBody DosageHistoryRequestDto dosageHistoryRequestDto) {
         Long userId = Long.valueOf(authentication.getName());
         dosageService.consumeMedicine(userId, dosageHistoryRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(null));

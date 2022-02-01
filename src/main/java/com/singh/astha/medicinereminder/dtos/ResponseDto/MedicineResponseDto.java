@@ -1,7 +1,6 @@
 package com.singh.astha.medicinereminder.dtos.ResponseDto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.singh.astha.medicinereminder.models.Category;
 import lombok.*;
 
 import java.util.List;

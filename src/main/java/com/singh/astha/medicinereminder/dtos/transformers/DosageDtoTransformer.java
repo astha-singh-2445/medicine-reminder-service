@@ -5,12 +5,11 @@ import com.singh.astha.medicinereminder.enums.DosageType;
 import com.singh.astha.medicinereminder.models.DosageHistory;
 import org.springframework.stereotype.Component;
 
-import java.util.Locale;
-
 @Component
 public class DosageDtoTransformer {
-    public DosageHistory convertDosageHistoryRequestDtoToDosageHistory(
-            DosageHistoryRequestDto dosageHistoryRequestDto, Long userId) {
+
+    public DosageHistory convertDosageHistoryRequestDtoToDosageHistory(DosageHistoryRequestDto dosageHistoryRequestDto,
+                                                                       Long userId) {
         DosageHistory dosageHistory = new DosageHistory();
         dosageHistory.setDosage(dosageHistoryRequestDto.getDosage());
         dosageHistory.setType(DosageType.valueOf(dosageHistoryRequestDto.getType().trim().toUpperCase()));
