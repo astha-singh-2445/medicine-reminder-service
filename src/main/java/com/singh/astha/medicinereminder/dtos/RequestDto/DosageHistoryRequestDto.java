@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -13,13 +12,12 @@ import javax.validation.constraints.NotNull;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MedicineRequestDto {
-
-    @NotBlank
-    private String name;
+public class DosageHistoryRequestDto {
 
     @NotNull
-    @Min(0)
-    private Integer currentDosage;
-    private String medicineType;
+    private Integer dosage;
+    @NotBlank
+    private String type;
+    @NotNull
+    private Long medicineId;
 }

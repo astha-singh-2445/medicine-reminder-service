@@ -1,6 +1,9 @@
 package com.singh.astha.medicinereminder.dtos.ResponseDto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -13,4 +16,8 @@ public class MedicineResponseDto {
     private String name;
     private Integer currentDosage;
     private String medicineType;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<CategoryResponseDto> categories;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean deleted;
 }

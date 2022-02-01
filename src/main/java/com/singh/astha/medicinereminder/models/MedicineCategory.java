@@ -18,10 +18,10 @@ public class MedicineCategory extends BaseModel {
 
     @ManyToOne(targetEntity = Medicine.class)
     @JoinColumn(name = "medicine_id")
-    private Long medicineId;
+    private Medicine medicine;
 
     @ManyToOne(targetEntity = Category.class)
     @JoinColumn(name = "category_id")
-    private Long categoryId;
+    private Category category;
 
 }

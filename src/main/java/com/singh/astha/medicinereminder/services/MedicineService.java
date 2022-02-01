@@ -5,6 +5,7 @@ import com.singh.astha.medicinereminder.dtos.ResponseDto.MedicineResponseDto;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Transactional
 public interface MedicineService {
@@ -13,5 +14,12 @@ public interface MedicineService {
 
     MedicineResponseDto updateMedicine(Long medicineId, MedicineRequestDto medicineRequestDto, Long userId);
 
-    List<MedicineResponseDto> listAllMedicine(Long userId);
+    List<MedicineResponseDto> listAllMedicine(Long userId, Integer page, Integer pageSize, Long categoryId);
+
+    void updateCategoryOfMedicine(Long userId, Long medicineId, Set<Long> categoriesId);
+
+    MedicineResponseDto getMedicine(Long userId, Long medicineId, boolean fetchCategories);
+
+    void deleteMedicine(Long medicineId, Long userId);
+
 }

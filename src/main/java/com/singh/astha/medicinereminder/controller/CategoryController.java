@@ -45,7 +45,7 @@ public class CategoryController {
 
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<ResponseWrapper<Object>> deleteCategory(Authentication authentication,
-                                                                @PathVariable Long categoryId) {
+                                                                  @PathVariable Long categoryId) {
         Long userId = Long.valueOf(authentication.getName());
         categoryService.deleteCategory(categoryId, userId);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(null));
@@ -54,7 +54,7 @@ public class CategoryController {
     @PutMapping("/{categoryId}")
     public ResponseEntity<ResponseWrapper<CategoryResponseDto>> updateCategory(Authentication authentication,
                                                                                @PathVariable Long categoryId,
-                                                                              @Valid @RequestBody CategoryRequestDto categoryRequestDto) {
+                                                                               @Valid @RequestBody CategoryRequestDto categoryRequestDto) {
         Long userId = Long.valueOf(authentication.getName());
         CategoryResponseDto categoryResponseDto = categoryService.updateCategory(categoryId, categoryRequestDto,
                 userId);
