@@ -77,7 +77,7 @@ public class MedicineServiceImpl implements MedicineService {
     public List<MedicineResponseDto> listAllMedicine(Long userId, Integer page, Integer pageSize,
                                                      Long categoryId) {
         PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by(Constants.ID));
-        Page<Medicine> medicinePage = medicineRepository.findAll(pageRequest, userId, categoryId);
+        Page<Medicine> medicinePage = medicineRepository.findAll(pageRequest, userId, categoryId, false);
         return medicinePage.stream()
                 .map(medicineDtoTransformer::convertMedicineToMedicineResponseDto)
                 .collect(Collectors.toList());
@@ -90,9 +90,9 @@ public class MedicineServiceImpl implements MedicineService {
             throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.MEDICINE_NOT_EXIST);
         }
 
-        List<Category> allCategories = categoryRepository.findAll(userId, categoriesId);
+        List<Category> allCategories = categoryRepository.findAll(userId, categoriesId, false);
         if (allCategories.size() != categoriesId.size()) {
-            throw new ResponseException(HttpStatus.BAD_REQUEST, "Error");
+            throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.ALL_CATEGORY_IDS_ARE_NOT_FOUND);
         }
 
         List<MedicineCategory> medicineCategoryList = medicineCategoryRepository.findByMedicineId(medicineId);

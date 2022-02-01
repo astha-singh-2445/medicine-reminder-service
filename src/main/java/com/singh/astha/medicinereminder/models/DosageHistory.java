@@ -18,9 +18,12 @@ public class DosageHistory extends BaseModel {
     @Enumerated(value = EnumType.STRING)
     private DosageType type;
 
-    @ManyToOne(targetEntity = Medicine.class)
+    @ManyToOne(targetEntity = Medicine.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
+
+    @Column(name = "medicine_id", insertable = false, updatable = false)
+    private Long medicineId;
 
     private Long userId;
 

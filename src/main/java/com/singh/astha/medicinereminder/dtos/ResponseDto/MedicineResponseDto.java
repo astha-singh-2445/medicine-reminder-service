@@ -18,4 +18,6 @@ public class MedicineResponseDto {
     private String medicineType;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<CategoryResponseDto> categories;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean deleted;
 }

@@ -20,8 +20,8 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
 
     Optional<Category> findByIdAndUserIdAndDeleted(Long id, Long userId, Boolean deleted);
 
-    @Query("SELECT c from Category c WHERE c.userId=:userId and c.id IN :categoryId")
-    List<Category> findAll(Long userId, Set<Long> categoryId);
+    @Query("SELECT c from Category c WHERE c.userId=:userId and c.id IN :categoryId and c.deleted=:deleted")
+    List<Category> findAll(Long userId, Set<Long> categoryId, boolean deleted);
 
     @Query("SELECT c from Category c where c.id in (select mc.category.id from MedicineCategory mc where mc.medicine" +
             ".id=:medicineId and mc.deleted=:deleted) and c.userId=:userId " +
