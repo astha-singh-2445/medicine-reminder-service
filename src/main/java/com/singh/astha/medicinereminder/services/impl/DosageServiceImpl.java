@@ -100,8 +100,7 @@ public class DosageServiceImpl implements DosageService {
     @Override
     public void deleteDosageHistory(Long dosageId, Long userId) {
         Optional<DosageHistory> dosageHistoryOptional = dosageHistoryRepository.findByIdAndUserIdAndDeleted(dosageId,
-                userId
-                , false);
+                userId, false);
         if (dosageHistoryOptional.isEmpty()) {
             return;
         }
@@ -112,27 +111,28 @@ public class DosageServiceImpl implements DosageService {
 
     @Override
     public DosageHistoryResponseDto updateDosageHistory(Long dosageId, Integer dosageCount, Long userId) {
-        Optional<DosageHistory> dosageHistoryOptional = dosageHistoryRepository.findByIdAndUserIdAndDeleted(dosageId, userId, false);
-        if(dosageHistoryOptional.isEmpty()){
+        Optional<DosageHistory> dosageHistoryOptional = dosageHistoryRepository.findByIdAndUserIdAndDeleted(dosageId,
+                userId, false);
+        if (dosageHistoryOptional.isEmpty()) {
             throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.DOSAGE_HISTORY_IS_NOT_PRESENT);
         }
         DosageHistory dosageHistory = dosageHistoryOptional.get();
 
         Medicine medicine = dosageHistory.getMedicine();
-        int currentDosage=0;
-        if(dosageHistory.getType() == DosageType.REFILL){
+        int currentDosage = 0;
+        if (dosageHistory.getType() == DosageType.REFILL) {
             currentDosage = medicine.getCurrentDosage() - dosageHistory.getDosage() + dosageCount;
-        }
-        else if(dosageHistory.getType() == DosageType.CONSUMPTION){
+        } else if (dosageHistory.getType() == DosageType.CONSUMPTION) {
             currentDosage = medicine.getCurrentDosage() + dosageHistory.getDosage() - dosageCount;
         }
-        if(currentDosage<0){
-            throw new ResponseException(HttpStatus.BAD_REQUEST,ErrorMessages.MEDICINE_IS_NOT_SUFFICIENT);
+        if (currentDosage < 0) {
+            throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.MEDICINE_IS_NOT_SUFFICIENT);
         }
         medicine.setCurrentDosage(currentDosage);
-       dosageHistory.setDosage(dosageCount);
+        dosageHistory.setDosage(dosageCount);
         DosageHistory updatedDosageHistory = dosageHistoryRepository.save(dosageHistory);
         MedicineResponseDto medicineResponseDto = medicineDtoTransformer.convertMedicineToMedicineResponseDto(medicine);
-        return dosageDtoTransformer.convertDosageHistoryToDosageHistoryResponseDto(updatedDosageHistory,medicineResponseDto);
+        return dosageDtoTransformer.convertDosageHistoryToDosageHistoryResponseDto(updatedDosageHistory,
+                medicineResponseDto);
     }
 }

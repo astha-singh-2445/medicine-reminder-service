@@ -51,10 +51,9 @@ public class DosageController {
     @PatchMapping("/{dosageId}")
     public ResponseEntity<ResponseWrapper<DosageHistoryResponseDto>> updateDosageHistory(Authentication authentication,
                                                                                          @PathVariable Long dosageId,
-                                                                                         @RequestParam Integer dosageCount){
+                                                                                         @RequestParam Integer dosageCount) {
         Long userId = Long.valueOf(authentication.getName());
-        DosageHistoryResponseDto dosageHistoryResponseDto = dosageService.updateDosageHistory(dosageId, dosageCount,
-                userId);
+        DosageHistoryResponseDto dosageHistoryResponseDto = dosageService.updateDosageHistory(dosageId, dosageCount, userId);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(dosageHistoryResponseDto));
     }
 
