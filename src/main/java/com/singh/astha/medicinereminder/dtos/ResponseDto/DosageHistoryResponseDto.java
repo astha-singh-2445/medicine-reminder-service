@@ -11,6 +11,7 @@ import java.time.OffsetDateTime;
 @Builder
 public class DosageHistoryResponseDto {
 
+    private Long id;
     private Integer dosage;
     private String type;
     private MedicineResponseDto medicine;

@@ -14,5 +14,6 @@ public class ErrorMessages {
     public static final String MEDICINE_IS_NOT_SUFFICIENT = "Medicine balance is not sufficient";
     public static final String DOSAGE_TYPE_IS_NOT_CORRECT = "Dosage type is not correct";
     public static final String ALL_CATEGORY_IDS_ARE_NOT_FOUND = "All category Ids are not found";
+    public static final String DOSAGE_HISTORY_IS_NOT_PRESENT = "Dosage history is not present";
 }
 
