@@ -13,4 +13,8 @@ public interface DosageService {
     MedicineResponseDto updateDosage(Long userId, DosageHistoryRequestDto dosageHistoryRequestDto);
 
     List<DosageHistoryResponseDto> getDosage(Long userId, Integer page, Integer pageSize, Long medicineId);
+
+    void deleteDosageHistory(Long dosageId, Long userId);
+
+    DosageHistoryResponseDto updateDosageHistory(Long dosageId, Integer dosageCount, Long userId);
 }

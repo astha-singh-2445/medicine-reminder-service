@@ -40,4 +40,21 @@ public class DosageController {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(dosage));
     }
 
+    @DeleteMapping("/{dosageId}")
+    public ResponseEntity<ResponseWrapper<Object>> deleteDosageHistory(Authentication authentication,
+                                                                       @PathVariable Long dosageId) {
+        Long userId = Long.valueOf(authentication.getName());
+        dosageService.deleteDosageHistory(dosageId, userId);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(null));
+    }
+
+    @PatchMapping("/{dosageId}")
+    public ResponseEntity<ResponseWrapper<DosageHistoryResponseDto>> updateDosageHistory(Authentication authentication,
+                                                                                         @PathVariable Long dosageId,
+                                                                                         @RequestParam Integer dosageCount) {
+        Long userId = Long.valueOf(authentication.getName());
+        DosageHistoryResponseDto dosageHistoryResponseDto = dosageService.updateDosageHistory(dosageId, dosageCount, userId);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(dosageHistoryResponseDto));
+    }
+
 }

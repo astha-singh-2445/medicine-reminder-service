@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface DosageHistoryRepository extends CrudRepository<DosageHistory, Long> {
 
@@ -14,4 +16,6 @@ public interface DosageHistoryRepository extends CrudRepository<DosageHistory, L
             ".id=:medicineId) and d.deleted=:deleted")
     Page<DosageHistory> findByUserIdAndMedicineIdAndDeleted(Pageable pageable, Long userId, Long medicineId,
                                                             boolean deleted);
+
+    Optional<DosageHistory> findByIdAndUserIdAndDeleted(Long dosageId, Long userId, boolean deleted);
 }

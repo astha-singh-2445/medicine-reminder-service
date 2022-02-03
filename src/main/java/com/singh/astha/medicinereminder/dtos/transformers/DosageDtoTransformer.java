@@ -22,6 +22,7 @@ public class DosageDtoTransformer {
     public DosageHistoryResponseDto convertDosageHistoryToDosageHistoryResponseDto(DosageHistory dosageHistory,
                                                                                    MedicineResponseDto medicine) {
         return DosageHistoryResponseDto.builder()
+                .id(dosageHistory.getId())
                 .dosage(dosageHistory.getDosage())
                 .medicine(medicine)
                 .type(dosageHistory.getType().name())

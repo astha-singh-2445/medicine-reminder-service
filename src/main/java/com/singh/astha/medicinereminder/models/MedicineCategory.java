@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -16,11 +17,11 @@ import javax.persistence.ManyToOne;
 @Entity
 public class MedicineCategory extends BaseModel {
 
-    @ManyToOne(targetEntity = Medicine.class)
+    @ManyToOne(targetEntity = Medicine.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
 
-    @ManyToOne(targetEntity = Category.class)
+    @ManyToOne(targetEntity = Category.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
