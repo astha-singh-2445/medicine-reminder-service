@@ -158,4 +158,10 @@ public class MedicineServiceImpl implements MedicineService {
         medicineCategoryRepository.saveAll(medicineCategoryList);
     }
 
+    @Override
+    public List<String> searchMedicine(Long userId, String medicineName) {
+        List<String> medicine = medicineRepository.searchMedicine(userId, medicineName);
+        return medicine;
+    }
+
 }

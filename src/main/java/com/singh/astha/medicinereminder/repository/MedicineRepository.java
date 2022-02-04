@@ -27,4 +27,7 @@ public interface MedicineRepository extends CrudRepository<Medicine, Long> {
             "mc.medicine.id from MedicineCategory mc WHERE mc.category.id=:categoryId and mc.deleted=:deleted)) and " +
             "m.deleted=:deleted")
     Page<Medicine> findAll(Pageable pageable, Long userId, Long categoryId, boolean deleted);
+
+    @Query("select m.name from Medicine m where m.userId=:userId and m.name LIKE %:medicineName%")
+    List<String> searchMedicine(Long userId, String medicineName);
 }
