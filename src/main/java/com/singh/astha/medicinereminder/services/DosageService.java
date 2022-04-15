@@ -5,12 +5,13 @@ import com.singh.astha.medicinereminder.dtos.ResponseDto.DosageHistoryResponseDt
 import com.singh.astha.medicinereminder.dtos.ResponseDto.MedicineResponseDto;
 
 import javax.transaction.Transactional;
+import java.text.ParseException;
 import java.util.List;
 
 @Transactional
 public interface DosageService {
 
-    MedicineResponseDto updateDosage(Long userId, DosageHistoryRequestDto dosageHistoryRequestDto);
+    MedicineResponseDto updateDosage(Long userId, DosageHistoryRequestDto dosageHistoryRequestDto) throws ParseException;
 
     List<DosageHistoryResponseDto> getDosage(Long userId, Integer page, Integer pageSize, Long medicineId);
 

@@ -6,10 +6,14 @@ import com.singh.astha.medicinereminder.dtos.ResponseDto.MedicineResponseDto;
 import com.singh.astha.medicinereminder.dtos.transformers.DosageDtoTransformer;
 import com.singh.astha.medicinereminder.dtos.transformers.MedicineDtoTransformer;
 import com.singh.astha.medicinereminder.enums.DosageType;
+import com.singh.astha.medicinereminder.enums.EventStatus;
+import com.singh.astha.medicinereminder.enums.EventType;
 import com.singh.astha.medicinereminder.exceptions.ResponseException;
 import com.singh.astha.medicinereminder.models.DosageHistory;
+import com.singh.astha.medicinereminder.models.EventReminder;
 import com.singh.astha.medicinereminder.models.Medicine;
 import com.singh.astha.medicinereminder.repository.DosageHistoryRepository;
+import com.singh.astha.medicinereminder.repository.EventReminderRepository;
 import com.singh.astha.medicinereminder.repository.MedicineRepository;
 import com.singh.astha.medicinereminder.services.DosageService;
 import com.singh.astha.medicinereminder.utils.Constants;
@@ -20,10 +24,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,19 +37,22 @@ public class DosageServiceImpl implements DosageService {
     private final DosageDtoTransformer dosageDtoTransformer;
     private final DosageHistoryRepository dosageHistoryRepository;
     private final MedicineDtoTransformer medicineDtoTransformer;
+    private final EventReminderRepository eventReminderRepository;
 
     public DosageServiceImpl(MedicineRepository medicineRepository,
                              DosageDtoTransformer dosageDtoTransformer,
                              DosageHistoryRepository dosageHistoryRepository,
-                             MedicineDtoTransformer medicineDtoTransformer) {
+                             MedicineDtoTransformer medicineDtoTransformer,
+                             EventReminderRepository eventReminderRepository) {
         this.medicineRepository = medicineRepository;
         this.dosageDtoTransformer = dosageDtoTransformer;
         this.dosageHistoryRepository = dosageHistoryRepository;
         this.medicineDtoTransformer = medicineDtoTransformer;
+        this.eventReminderRepository = eventReminderRepository;
     }
 
     @Override
-    public MedicineResponseDto updateDosage(Long userId, DosageHistoryRequestDto dosageHistoryRequestDto) {
+    public MedicineResponseDto updateDosage(Long userId, DosageHistoryRequestDto dosageHistoryRequestDto) throws ParseException {
         DosageHistory dosageHistory;
         try {
             dosageHistory = dosageDtoTransformer.convertDosageHistoryRequestDtoToDosageHistory(
@@ -70,7 +77,27 @@ public class DosageServiceImpl implements DosageService {
         medicine = medicineRepository.save(medicine);
         dosageHistory.setMedicine(medicine);
         dosageHistoryRepository.save(dosageHistory);
+        setEventReminder(medicine);
         return medicineDtoTransformer.convertMedicineToMedicineResponseDto(medicine);
+    }
+
+    private void setEventReminder(Medicine medicine) throws ParseException {
+        if(medicine.getCurrentDosage()<=medicine.getRemindBeforeDosageCount()){
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date dateTime = new Date();
+            String date= new SimpleDateFormat("yyyy/MM/dd").format(dateTime);
+            Map<String,Object> medicineEventData=new HashMap<>();
+            medicineEventData.put("Medicine_id",medicine.getId());
+            EventReminder eventReminder = EventReminder.builder()
+                    .reminderDate(date)
+                    .eventType(EventType.REFILL_REMINDER)
+                    .status(EventStatus.QUEUED)
+                    .eventData(medicineEventData)
+                    .userId(medicine.getUserId())
+                    .build();
+            eventReminderRepository.save(eventReminder);
+
+        }
     }
 
     @Override

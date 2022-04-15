@@ -15,6 +15,7 @@ public class Medicine extends BaseModel {
 
     private String name;
     private Integer currentDosage;
+    private Integer remindBeforeDosageCount;
     private String medicineType;
     private Long userId;
 
