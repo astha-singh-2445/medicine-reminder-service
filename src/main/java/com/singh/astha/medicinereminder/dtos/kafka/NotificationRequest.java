@@ -15,6 +15,7 @@ public class NotificationRequest {
 
     private Long userId;
     private String templateId;
-    private HashMap<String, String> placeHolder;
+    private HashMap<String, String> titlePlaceholder;
+    private HashMap<String, String> bodyPlaceHolders;
 
 }

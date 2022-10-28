@@ -45,42 +45,42 @@ public class HealthController {
         return ResponseEntity.ok(Constants.OK);
     }
 
-    @GetMapping(value="/push")
+    @GetMapping(value = "/push")
     public void cronJobSch() throws JsonProcessingException, ParseException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date dateTime = new Date();
-        String date= new SimpleDateFormat("yyyy/MM/dd").format(dateTime);
+        String date = new SimpleDateFormat("yyyy/MM/dd").format(dateTime);
         List<EventReminder> eventReminderList = eventReminderRepository.findByReminderDateAndStatus(
                 date, EventStatus.QUEUED);
-        for(EventReminder eventReminder: eventReminderList){
-            if(eventReminder.getEventType().equals(EventType.REFILL_REMINDER)){
+        for (EventReminder eventReminder : eventReminderList) {
+            if (eventReminder.getEventType().equals(EventType.REFILL_REMINDER)) {
                 Object medicineId = eventReminder.getEventData().get("Medicine_id");
                 Optional<Medicine> medicineOptional = medicineRepository.findById((Long) medicineId);
-                if(medicineOptional.isEmpty()){
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Medicine Id not exist");
+                if (medicineOptional.isEmpty()) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Medicine Id not exist");
                 }
                 Medicine medicine = medicineOptional.get();
-                if(medicine.getRemindBeforeDosageCount()==null){
+                if (medicine.getRemindBeforeDosageCount() == null) {
                     eventReminder.setStatus(EventStatus.DISCARDED);
                     continue;
-                }
-                else if(medicine.getCurrentDosage()<=medicine.getRemindBeforeDosageCount()){
-                    NotificationRequest notificationRequest=new NotificationRequest();
+                } else if (medicine.getCurrentDosage() <= medicine.getRemindBeforeDosageCount()) {
+                    NotificationRequest notificationRequest = new NotificationRequest();
                     notificationRequest.setUserId(medicine.getUserId());
-                    notificationRequest.setTemplateId("62580ca3b352db798c4ec8ca");
+                    notificationRequest.setTemplateId("Medicine");
+                    HashMap<String, String> title = new HashMap<>();
+                    title.put("medicine-reminder", "Medicine");
+                    notificationRequest.setTitlePlaceholder(title);
                     HashMap<String, String> values = new HashMap<>();
                     values.put("medicine-name", medicine.getName());
-                    notificationRequest.setPlaceHolder(values);
+                    notificationRequest.setBodyPlaceHolders(values);
                     eventReminderProducer.pushEvent(notificationRequest);
                     eventReminder.setStatus(EventStatus.PROCESSED);
 
-                }
-                else{
+                } else {
                     eventReminder.setStatus(EventStatus.DISCARDED);
                 }
                 eventReminderRepository.save(eventReminder);
             }
         }
     }
-
 }

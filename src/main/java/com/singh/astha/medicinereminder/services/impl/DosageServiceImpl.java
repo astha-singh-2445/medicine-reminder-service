@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Clock;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -88,13 +89,14 @@ public class DosageServiceImpl implements DosageService {
             String date= new SimpleDateFormat("yyyy/MM/dd").format(dateTime);
             Map<String,Object> medicineEventData=new HashMap<>();
             medicineEventData.put("Medicine_id",medicine.getId());
-            EventReminder eventReminder = EventReminder.builder()
-                    .reminderDate(date)
-                    .eventType(EventType.REFILL_REMINDER)
-                    .status(EventStatus.QUEUED)
-                    .eventData(medicineEventData)
-                    .userId(medicine.getUserId())
-                    .build();
+            EventReminder eventReminder =new EventReminder();
+            eventReminder.setReminderDate(date);
+            eventReminder.setEventType(EventType.REFILL_REMINDER);
+            eventReminder.setStatus(EventStatus.QUEUED);
+            eventReminder.setEventData(medicineEventData);
+            eventReminder.setUserId(medicine.getUserId());
+            eventReminder.setTimeCreated(Clock.systemDefaultZone().millis());
+            eventReminder.setTimeLastModified(Clock.systemDefaultZone().millis());
             eventReminderRepository.save(eventReminder);
 
         }

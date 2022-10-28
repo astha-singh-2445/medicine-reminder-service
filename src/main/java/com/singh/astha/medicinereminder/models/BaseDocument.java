@@ -11,6 +11,6 @@ import org.springframework.data.annotation.Id;
 public class BaseDocument {
     @Id
     private String id;
-    private Long timeCreated;
-    private Long timeLastModified;
+    protected Long timeCreated;
+    protected Long timeLastModified;
 }

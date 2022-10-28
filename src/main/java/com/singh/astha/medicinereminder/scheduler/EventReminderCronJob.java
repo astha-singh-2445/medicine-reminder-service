@@ -62,7 +62,7 @@ public class EventReminderCronJob {
                     notificationRequest.setTemplateId("62580ca3b352db798c4ec8ca");
                     HashMap<String, String> values = new HashMap<>();
                     values.put("medicine-name", medicine.getName());
-                    notificationRequest.setPlaceHolder(values);
+                    notificationRequest.setBodyPlaceHolders(values);
                     eventReminderProducer.pushEvent(notificationRequest);
                     eventReminder.setStatus(EventStatus.PROCESSED);
 

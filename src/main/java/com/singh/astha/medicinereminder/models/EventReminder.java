@@ -5,7 +5,6 @@ import com.singh.astha.medicinereminder.enums.EventType;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Column;
 import java.util.Map;
 
 @Document("event_reminder")
@@ -20,7 +19,6 @@ public class EventReminder extends BaseDocument {
     private EventType eventType;
     private EventStatus status;
 
-    @Column(columnDefinition = "json")
     private Map<String, Object> eventData;
 
     private Long userId;
