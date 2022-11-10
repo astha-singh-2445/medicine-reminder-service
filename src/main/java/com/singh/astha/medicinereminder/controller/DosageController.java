@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -25,7 +24,7 @@ public class DosageController {
 
     @PostMapping("/entry")
     public ResponseEntity<ResponseWrapper<MedicineResponseDto>> consumeOrRefillMedicine(Authentication authentication,
-                                                                                        @RequestBody DosageHistoryRequestDto dosageHistoryRequestDto) throws ParseException {
+                                                                                        @RequestBody DosageHistoryRequestDto dosageHistoryRequestDto) {
         Long userId = Long.valueOf(authentication.getName());
         dosageService.updateDosage(userId, dosageHistoryRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(null));
@@ -54,7 +53,8 @@ public class DosageController {
                                                                                          @PathVariable Long dosageId,
                                                                                          @RequestParam Integer dosageCount) {
         Long userId = Long.valueOf(authentication.getName());
-        DosageHistoryResponseDto dosageHistoryResponseDto = dosageService.updateDosageHistory(dosageId, dosageCount, userId);
+        DosageHistoryResponseDto dosageHistoryResponseDto = dosageService.updateDosageHistory(dosageId, dosageCount,
+                userId);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(dosageHistoryResponseDto));
     }
 

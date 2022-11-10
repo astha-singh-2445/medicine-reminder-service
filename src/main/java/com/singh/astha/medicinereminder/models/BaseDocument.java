@@ -9,8 +9,9 @@ import org.springframework.data.annotation.Id;
 @Setter
 @NoArgsConstructor
 public class BaseDocument {
-    @Id
-    private String id;
+
     protected Long timeCreated;
     protected Long timeLastModified;
+    @Id
+    private String id;
 }

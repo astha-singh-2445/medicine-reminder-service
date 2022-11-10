@@ -46,15 +46,14 @@ public class HealthController {
     }
 
     @GetMapping(value = "/push")
-    public void cronJobSch() throws JsonProcessingException, ParseException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    public void cronJobSch() throws JsonProcessingException {
         Date dateTime = new Date();
         String date = new SimpleDateFormat("yyyy/MM/dd").format(dateTime);
         List<EventReminder> eventReminderList = eventReminderRepository.findByReminderDateAndStatus(
                 date, EventStatus.QUEUED);
         for (EventReminder eventReminder : eventReminderList) {
             if (eventReminder.getEventType().equals(EventType.REFILL_REMINDER)) {
-                Object medicineId = eventReminder.getEventData().get("Medicine_id");
+                Object medicineId = eventReminder.getEventData().get(Constants.MEDICINE_ID);
                 Optional<Medicine> medicineOptional = medicineRepository.findById((Long) medicineId);
                 if (medicineOptional.isEmpty()) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Medicine Id not exist");

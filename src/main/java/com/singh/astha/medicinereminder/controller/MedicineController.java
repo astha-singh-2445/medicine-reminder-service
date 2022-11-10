@@ -3,7 +3,6 @@ package com.singh.astha.medicinereminder.controller;
 import com.singh.astha.medicinereminder.dtos.RequestDto.MedicineRequestDto;
 import com.singh.astha.medicinereminder.dtos.ResponseDto.MedicineResponseDto;
 import com.singh.astha.medicinereminder.dtos.ResponseDto.ResponseWrapper;
-import com.singh.astha.medicinereminder.models.Medicine;
 import com.singh.astha.medicinereminder.services.MedicineService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -84,7 +83,7 @@ public class MedicineController {
 
     @GetMapping("/search")
     public ResponseEntity<ResponseWrapper<List<String>>> searchMedicine(Authentication authentication,
-                                                                        @RequestParam String medicineName){
+                                                                        @RequestParam String medicineName) {
         Long userId = Long.valueOf(authentication.getName());
         List<String> medicine = medicineService.searchMedicine(userId, medicineName);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(medicine));

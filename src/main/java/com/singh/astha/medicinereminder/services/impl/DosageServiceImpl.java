@@ -24,8 +24,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.util.*;
@@ -53,7 +51,7 @@ public class DosageServiceImpl implements DosageService {
     }
 
     @Override
-    public MedicineResponseDto updateDosage(Long userId, DosageHistoryRequestDto dosageHistoryRequestDto) throws ParseException {
+    public MedicineResponseDto updateDosage(Long userId, DosageHistoryRequestDto dosageHistoryRequestDto) {
         DosageHistory dosageHistory;
         try {
             dosageHistory = dosageDtoTransformer.convertDosageHistoryRequestDtoToDosageHistory(
@@ -82,14 +80,13 @@ public class DosageServiceImpl implements DosageService {
         return medicineDtoTransformer.convertMedicineToMedicineResponseDto(medicine);
     }
 
-    private void setEventReminder(Medicine medicine) throws ParseException {
-        if(medicine.getCurrentDosage()<=medicine.getRemindBeforeDosageCount()){
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private void setEventReminder(Medicine medicine) {
+        if (medicine.getCurrentDosage() <= medicine.getRemindBeforeDosageCount()) {
             Date dateTime = new Date();
-            String date= new SimpleDateFormat("yyyy/MM/dd").format(dateTime);
-            Map<String,Object> medicineEventData=new HashMap<>();
-            medicineEventData.put("Medicine_id",medicine.getId());
-            EventReminder eventReminder =new EventReminder();
+            String date = new SimpleDateFormat(Constants.YYYY_MM_DD).format(dateTime);
+            Map<String, Object> medicineEventData = new HashMap<>();
+            medicineEventData.put(Constants.MEDICINE_ID, medicine.getId());
+            EventReminder eventReminder = new EventReminder();
             eventReminder.setReminderDate(date);
             eventReminder.setEventType(EventType.REFILL_REMINDER);
             eventReminder.setStatus(EventStatus.QUEUED);
