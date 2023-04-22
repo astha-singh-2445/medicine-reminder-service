@@ -22,4 +22,5 @@ public interface MedicineService {
 
     void deleteMedicine(Long medicineId, Long userId);
 
+    List<String> searchMedicine(Long userId, String medicineName);
 }

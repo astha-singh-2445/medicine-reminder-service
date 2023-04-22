@@ -80,4 +80,14 @@ public class MedicineController {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(null));
     }
 
+
+    @GetMapping("/search")
+    public ResponseEntity<ResponseWrapper<List<String>>> searchMedicine(Authentication authentication,
+                                                                        @RequestParam String medicineName) {
+        Long userId = Long.valueOf(authentication.getName());
+        List<String> medicine = medicineService.searchMedicine(userId, medicineName);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(medicine));
+    }
+
+
 }
