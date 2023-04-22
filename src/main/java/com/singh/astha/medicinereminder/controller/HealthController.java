@@ -45,41 +45,4 @@ public class HealthController {
         return ResponseEntity.ok(Constants.OK);
     }
 
-    @GetMapping(value = "/push")
-    public void cronJobSch() throws JsonProcessingException {
-        Date dateTime = new Date();
-        String date = new SimpleDateFormat("yyyy/MM/dd").format(dateTime);
-        List<EventReminder> eventReminderList = eventReminderRepository.findByReminderDateAndStatus(
-                date, EventStatus.QUEUED);
-        for (EventReminder eventReminder : eventReminderList) {
-            if (eventReminder.getEventType().equals(EventType.REFILL_REMINDER)) {
-                Object medicineId = eventReminder.getEventData().get(Constants.MEDICINE_ID);
-                Optional<Medicine> medicineOptional = medicineRepository.findById((Long) medicineId);
-                if (medicineOptional.isEmpty()) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Medicine Id not exist");
-                }
-                Medicine medicine = medicineOptional.get();
-                if (medicine.getRemindBeforeDosageCount() == null) {
-                    eventReminder.setStatus(EventStatus.DISCARDED);
-                    continue;
-                } else if (medicine.getCurrentDosage() <= medicine.getRemindBeforeDosageCount()) {
-                    NotificationRequest notificationRequest = new NotificationRequest();
-                    notificationRequest.setUserId(medicine.getUserId());
-                    notificationRequest.setTemplateId("Medicine");
-                    HashMap<String, String> title = new HashMap<>();
-                    title.put("medicine-reminder", "Medicine");
-                    notificationRequest.setTitlePlaceholder(title);
-                    HashMap<String, String> values = new HashMap<>();
-                    values.put("medicine-name", medicine.getName());
-                    notificationRequest.setBodyPlaceHolders(values);
-                    eventReminderProducer.pushEvent(notificationRequest);
-                    eventReminder.setStatus(EventStatus.PROCESSED);
-
-                } else {
-                    eventReminder.setStatus(EventStatus.DISCARDED);
-                }
-                eventReminderRepository.save(eventReminder);
-            }
-        }
-    }
 }
