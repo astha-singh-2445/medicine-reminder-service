@@ -39,7 +39,7 @@ public class EventReminderCronJob {
     }
 
 
-    @Scheduled(cron = "0 0 22 ? * *")
+    @Scheduled(cron = "0 0 10 ? * *")
     public void cronJobSch() {
         DateFormat dateFormat = new SimpleDateFormat(Constants.YYYY_MM_DD_HH_MM_SS);
         Date date = new Date();
