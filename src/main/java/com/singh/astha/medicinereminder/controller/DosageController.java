@@ -5,6 +5,7 @@ import com.singh.astha.medicinereminder.dtos.ResponseDto.DosageHistoryResponseDt
 import com.singh.astha.medicinereminder.dtos.ResponseDto.MedicineResponseDto;
 import com.singh.astha.medicinereminder.dtos.ResponseDto.ResponseWrapper;
 import com.singh.astha.medicinereminder.services.DosageService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/dosage")
+@SecurityRequirement(name = "bearerAuth")
 public class DosageController {
 
     private final DosageService dosageService;
