@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  medicine:
+    image: medicine_reminder
+    restart: always
+
+  web:
+    build:
+      context: ./nginx/
+      dockerfile: Nginx.Dockerfile
+    depends_on:
+      - medicine
+    ports:
+      - 5100:5100
+    restart: always
+
