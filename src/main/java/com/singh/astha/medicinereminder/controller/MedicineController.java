@@ -4,6 +4,7 @@ import com.singh.astha.medicinereminder.dtos.RequestDto.MedicineRequestDto;
 import com.singh.astha.medicinereminder.dtos.ResponseDto.MedicineResponseDto;
 import com.singh.astha.medicinereminder.dtos.ResponseDto.ResponseWrapper;
 import com.singh.astha.medicinereminder.services.MedicineService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -15,6 +16,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/medicine")
+@SecurityRequirement(name = "bearerAuth")
 public class MedicineController {
 
 
