@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  medicine:
+    build:
+      dockerfile: Dockerfile
+      args:
+        DB_PASSWORD: root
+        DB_USERNAME: root
+        MONGO_URL: "mongodb://mongodb:27017/notification?readPreference=primary&appname=MongoDB%20Compass&ssl=false"
+        MYSQL_URL: "jdbc:mysql://mysql:3306/medicine_reminder"
+        PUBLIC_KEY: "${PUBLIC_KEY}"
+    depends_on:
+      - mongodb
+      - mysql
+    restart: always
+
+  web:
+    build:
+      context: ./nginx/
+      dockerfile: Nginx.Dockerfile
+    depends_on:
+      - medicine
+    ports:
+      - "5100:5100"
+    restart: always
+
+  mongodb:
+    image: mongo:6-jammy
+    ports:
+      - "27017:27017"
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+        - MYSQL_DATABASE=medicine_reminder
+        - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3306:3306"
