@@ -1,8 +1,25 @@
 version: '3'
 
 services:
-  medicine:
+  medicine1:
     image: medicine_reminder
+    depends_on:
+      - mongodb
+      - mysql
+    restart: always
+
+  medicine2:
+    image: medicine_reminder
+    depends_on:
+      - mongodb
+      - mysql
+    restart: always
+
+  medicine3:
+    image: medicine_reminder
+    depends_on:
+      - mongodb
+      - mysql
     restart: always
 
   web:
@@ -10,8 +27,24 @@ services:
       context: ./nginx/
       dockerfile: Nginx.Dockerfile
     depends_on:
-      - medicine
+      - medicine1
+      - medicine2
+      - medicine3
     ports:
       - 5100:5100
     restart: always
+
+  mongodb:
+    image: mongo:6-jammy
+    ports:
+      - 27017:27017
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+        - MYSQL_DATABASE=medicine_reminder
+        - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - 3306:3306
 
