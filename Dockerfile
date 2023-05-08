@@ -6,9 +6,10 @@ ARG MYSQL_URL
 ARG PUBLIC_KEY
 WORKDIR /app
 COPY .mvn .mvn
-COPY src src
 COPY mvnw mvnw
 COPY pom.xml pom.xml
+RUN ./mvnw verify --fail-never
+COPY src src
 ENV DB_PASSWORD $DB_PASSWORD
 ENV DB_USERNAME $DB_USERNAME
 ENV MONGO_URL $MONGO_URL
