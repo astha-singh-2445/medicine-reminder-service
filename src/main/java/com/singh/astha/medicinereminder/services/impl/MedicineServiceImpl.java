@@ -5,13 +5,17 @@ import com.singh.astha.medicinereminder.dtos.ResponseDto.CategoryResponseDto;
 import com.singh.astha.medicinereminder.dtos.ResponseDto.MedicineResponseDto;
 import com.singh.astha.medicinereminder.dtos.transformers.CategoryDtoTransformer;
 import com.singh.astha.medicinereminder.dtos.transformers.MedicineDtoTransformer;
+import com.singh.astha.medicinereminder.enums.DosageType;
 import com.singh.astha.medicinereminder.exceptions.ResponseException;
 import com.singh.astha.medicinereminder.models.Category;
+import com.singh.astha.medicinereminder.models.DosageHistory;
 import com.singh.astha.medicinereminder.models.Medicine;
 import com.singh.astha.medicinereminder.models.MedicineCategory;
 import com.singh.astha.medicinereminder.repository.CategoryRepository;
+import com.singh.astha.medicinereminder.repository.DosageHistoryRepository;
 import com.singh.astha.medicinereminder.repository.MedicineCategoryRepository;
 import com.singh.astha.medicinereminder.repository.MedicineRepository;
+import com.singh.astha.medicinereminder.services.DosageService;
 import com.singh.astha.medicinereminder.services.MedicineService;
 import com.singh.astha.medicinereminder.utils.Constants;
 import com.singh.astha.medicinereminder.utils.ErrorMessages;
@@ -38,16 +42,19 @@ public class MedicineServiceImpl implements MedicineService {
     private final MedicineCategoryRepository medicineCategoryRepository;
     private final CategoryDtoTransformer categoryDtoTransformer;
 
+    private final DosageHistoryRepository dosageHistoryRepository;
+
     @Autowired
     public MedicineServiceImpl(MedicineRepository medicineRepository, MedicineDtoTransformer medicineDtoTransformer,
                                CategoryRepository categoryRepository,
                                MedicineCategoryRepository medicineCategoryRepository,
-                               CategoryDtoTransformer categoryDtoTransformer) {
+                               CategoryDtoTransformer categoryDtoTransformer, DosageService dosageService, DosageHistoryRepository dosageHistoryRepository) {
         this.medicineRepository = medicineRepository;
         this.medicineDtoTransformer = medicineDtoTransformer;
         this.categoryRepository = categoryRepository;
         this.medicineCategoryRepository = medicineCategoryRepository;
         this.categoryDtoTransformer = categoryDtoTransformer;
+        this.dosageHistoryRepository = dosageHistoryRepository;
     }
 
     @Override
@@ -58,6 +65,13 @@ public class MedicineServiceImpl implements MedicineService {
             throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.SAME_MEDICINE_IS_ALREADY_EXIST);
         }
         Medicine savedMedicine = medicineRepository.save(medicine);
+        DosageHistory dosageHistory = new DosageHistory();
+        dosageHistory.setMedicineId(savedMedicine.getId());
+        dosageHistory.setMedicine(savedMedicine);
+        dosageHistory.setDosage(savedMedicine.getCurrentDosage());
+        dosageHistory.setType(DosageType.REFILL);
+        dosageHistory.setUserId(userId);
+        dosageHistoryRepository.save(dosageHistory);
         return medicineDtoTransformer.convertMedicineToMedicineResponseDto(savedMedicine);
     }
 
