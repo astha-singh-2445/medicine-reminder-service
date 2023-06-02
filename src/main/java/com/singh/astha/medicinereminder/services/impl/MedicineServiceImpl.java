@@ -178,4 +178,15 @@ public class MedicineServiceImpl implements MedicineService {
         return medicine;
     }
 
+    @Override
+    public void setReminder(Long medicineId, Integer dosageCount, Long userId) {
+        Optional<Medicine> optionalMedicine = medicineRepository.findByIdAndUserIdAndDeleted(medicineId, userId, false);
+        if (optionalMedicine.isEmpty()) {
+            throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.MEDICINE_NOT_EXIST);
+        }
+        Medicine medicine = optionalMedicine.get();
+        medicine.setRemindBeforeDosageCount(dosageCount);
+        medicineRepository.save(medicine);
+    }
+
 }

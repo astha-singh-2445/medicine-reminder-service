@@ -23,4 +23,6 @@ public interface MedicineService {
     void deleteMedicine(Long medicineId, Long userId);
 
     List<String> searchMedicine(Long userId, String medicineName);
+
+    void setReminder(Long medicineId, Integer dosageCount, Long userId);
 }
