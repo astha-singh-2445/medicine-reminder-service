@@ -5,10 +5,21 @@ import com.singh.astha.medicinereminder.dtos.ResponseDto.DosageHistoryResponseDt
 import com.singh.astha.medicinereminder.dtos.ResponseDto.MedicineResponseDto;
 import com.singh.astha.medicinereminder.enums.DosageType;
 import com.singh.astha.medicinereminder.models.DosageHistory;
+import com.singh.astha.medicinereminder.models.Medicine;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DosageDtoTransformer {
+
+    public static DosageHistory setDosageHistory(Long userId, Medicine savedMedicine) {
+        DosageHistory dosageHistory = new DosageHistory();
+        dosageHistory.setMedicineId(savedMedicine.getId());
+        dosageHistory.setMedicine(savedMedicine);
+        dosageHistory.setDosage(savedMedicine.getCurrentDosage());
+        dosageHistory.setType(DosageType.REFILL);
+        dosageHistory.setUserId(userId);
+        return dosageHistory;
+    }
 
     public DosageHistory convertDosageHistoryRequestDtoToDosageHistory(DosageHistoryRequestDto dosageHistoryRequestDto,
                                                                        Long userId) {

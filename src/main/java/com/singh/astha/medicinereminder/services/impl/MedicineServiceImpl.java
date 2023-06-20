@@ -4,8 +4,8 @@ import com.singh.astha.medicinereminder.dtos.RequestDto.MedicineRequestDto;
 import com.singh.astha.medicinereminder.dtos.ResponseDto.CategoryResponseDto;
 import com.singh.astha.medicinereminder.dtos.ResponseDto.MedicineResponseDto;
 import com.singh.astha.medicinereminder.dtos.transformers.CategoryDtoTransformer;
+import com.singh.astha.medicinereminder.dtos.transformers.DosageDtoTransformer;
 import com.singh.astha.medicinereminder.dtos.transformers.MedicineDtoTransformer;
-import com.singh.astha.medicinereminder.enums.DosageType;
 import com.singh.astha.medicinereminder.exceptions.ResponseException;
 import com.singh.astha.medicinereminder.models.Category;
 import com.singh.astha.medicinereminder.models.DosageHistory;
@@ -65,12 +65,7 @@ public class MedicineServiceImpl implements MedicineService {
             throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.SAME_MEDICINE_IS_ALREADY_EXIST);
         }
         Medicine savedMedicine = medicineRepository.save(medicine);
-        DosageHistory dosageHistory = new DosageHistory();
-        dosageHistory.setMedicineId(savedMedicine.getId());
-        dosageHistory.setMedicine(savedMedicine);
-        dosageHistory.setDosage(savedMedicine.getCurrentDosage());
-        dosageHistory.setType(DosageType.REFILL);
-        dosageHistory.setUserId(userId);
+        DosageHistory dosageHistory = DosageDtoTransformer.setDosageHistory(userId, savedMedicine);
         dosageHistoryRepository.save(dosageHistory);
         return medicineDtoTransformer.convertMedicineToMedicineResponseDto(savedMedicine);
     }
@@ -182,7 +177,7 @@ public class MedicineServiceImpl implements MedicineService {
     public void setReminder(Long medicineId, Integer dosageCount, Long userId) {
         Optional<Medicine> optionalMedicine = medicineRepository.findByIdAndUserIdAndDeleted(medicineId, userId, false);
         if (optionalMedicine.isEmpty()) {
-            throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.MEDICINE_NOT_EXIST);
+            throw new ResponseException(HttpStatus.NOT_FOUND, ErrorMessages.MEDICINE_NOT_EXIST);
         }
         Medicine medicine = optionalMedicine.get();
         medicine.setRemindBeforeDosageCount(dosageCount);
