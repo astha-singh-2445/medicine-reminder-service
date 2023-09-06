@@ -1,8 +1,8 @@
 package com.singh.astha.medicinereminder.controller;
 
-import com.singh.astha.medicinereminder.dtos.RequestDto.CategoryRequestDto;
-import com.singh.astha.medicinereminder.dtos.ResponseDto.CategoryResponseDto;
-import com.singh.astha.medicinereminder.dtos.ResponseDto.ResponseWrapper;
+import com.singh.astha.medicinereminder.dtos.request.CategoryRequestDto;
+import com.singh.astha.medicinereminder.dtos.response.CategoryResponseDto;
+import com.singh.astha.medicinereminder.dtos.response.ResponseWrapper;
 import com.singh.astha.medicinereminder.services.CategoryService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;

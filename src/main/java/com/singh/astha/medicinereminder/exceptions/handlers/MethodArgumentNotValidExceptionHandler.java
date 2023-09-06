@@ -1,6 +1,6 @@
 package com.singh.astha.medicinereminder.exceptions.handlers;
 
-import com.singh.astha.medicinereminder.dtos.ResponseDto.ResponseWrapper;
+import com.singh.astha.medicinereminder.dtos.response.ResponseWrapper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

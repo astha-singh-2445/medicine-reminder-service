@@ -1,7 +1,7 @@
 package com.singh.astha.medicinereminder.dtos.transformers;
 
-import com.singh.astha.medicinereminder.dtos.RequestDto.MedicineRequestDto;
-import com.singh.astha.medicinereminder.dtos.ResponseDto.MedicineResponseDto;
+import com.singh.astha.medicinereminder.dtos.request.MedicineRequestDto;
+import com.singh.astha.medicinereminder.dtos.response.MedicineResponseDto;
 import com.singh.astha.medicinereminder.models.Medicine;
 import org.springframework.stereotype.Component;
 

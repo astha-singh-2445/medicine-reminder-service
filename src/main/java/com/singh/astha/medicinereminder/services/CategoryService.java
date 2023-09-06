@@ -1,7 +1,7 @@
 package com.singh.astha.medicinereminder.services;
 
-import com.singh.astha.medicinereminder.dtos.RequestDto.CategoryRequestDto;
-import com.singh.astha.medicinereminder.dtos.ResponseDto.CategoryResponseDto;
+import com.singh.astha.medicinereminder.dtos.request.CategoryRequestDto;
+import com.singh.astha.medicinereminder.dtos.response.CategoryResponseDto;
 import jakarta.transaction.Transactional;
 
 import java.util.List;

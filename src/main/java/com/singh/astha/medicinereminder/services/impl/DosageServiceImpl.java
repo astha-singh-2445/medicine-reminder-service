@@ -1,8 +1,8 @@
 package com.singh.astha.medicinereminder.services.impl;
 
-import com.singh.astha.medicinereminder.dtos.RequestDto.DosageHistoryRequestDto;
-import com.singh.astha.medicinereminder.dtos.ResponseDto.DosageHistoryResponseDto;
-import com.singh.astha.medicinereminder.dtos.ResponseDto.MedicineResponseDto;
+import com.singh.astha.medicinereminder.dtos.request.DosageHistoryRequestDto;
+import com.singh.astha.medicinereminder.dtos.response.DosageHistoryResponseDto;
+import com.singh.astha.medicinereminder.dtos.response.MedicineResponseDto;
 import com.singh.astha.medicinereminder.dtos.transformers.DosageDtoTransformer;
 import com.singh.astha.medicinereminder.dtos.transformers.MedicineDtoTransformer;
 import com.singh.astha.medicinereminder.enums.DosageType;
@@ -118,9 +118,10 @@ public class DosageServiceImpl implements DosageService {
                 }));
 
         return dosageHistoryPage.stream().map(dosage -> {
-            MedicineResponseDto medicineResponseDto = medicineResponseDtoMap.get(dosage.getMedicineId());
-            return dosageDtoTransformer.convertDosageHistoryToDosageHistoryResponseDto(dosage, medicineResponseDto);
-        }).collect(Collectors.toList());
+                    MedicineResponseDto medicineResponseDto = medicineResponseDtoMap.get(dosage.getMedicineId());
+                    return dosageDtoTransformer.convertDosageHistoryToDosageHistoryResponseDto(dosage, medicineResponseDto);
+                })
+                .toList();
     }
 
     @Override

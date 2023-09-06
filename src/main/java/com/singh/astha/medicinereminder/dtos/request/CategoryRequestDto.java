@@ -1,4 +1,4 @@
-package com.singh.astha.medicinereminder.dtos.RequestDto;
+package com.singh.astha.medicinereminder.dtos.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

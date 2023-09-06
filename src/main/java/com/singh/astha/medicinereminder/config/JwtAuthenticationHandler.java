@@ -1,7 +1,7 @@
 package com.singh.astha.medicinereminder.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.singh.astha.medicinereminder.dtos.ResponseDto.ResponseWrapper;
+import com.singh.astha.medicinereminder.dtos.response.ResponseWrapper;
 import com.singh.astha.medicinereminder.exceptions.ResponseException;
 import com.singh.astha.medicinereminder.services.JwtService;
 import com.singh.astha.medicinereminder.utils.Constants;
