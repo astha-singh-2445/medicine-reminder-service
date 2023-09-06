@@ -56,15 +56,7 @@ public class EventReminderCronJob {
                     eventReminder.setStatus(EventStatus.DISCARDED);
                     continue;
                 } else if (medicine.getCurrentDosage() <= medicine.getRemindBeforeDosageCount()) {
-                    NotificationRequest notificationRequest = new NotificationRequest();
-                    notificationRequest.setUserId(medicine.getUserId());
-                    notificationRequest.setTemplateId("Paracetamol");
-                    HashMap<String, String> title = new HashMap<>();
-                    title.put("medicine-reminder", "Medicine");
-                    notificationRequest.setTitlePlaceholder(title);
-                    HashMap<String, String> values = new HashMap<>();
-                    values.put(Constants.MEDICINE_NAME, medicine.getName());
-                    notificationRequest.setBodyPlaceHolders(values);
+                    NotificationRequest notificationRequest = getNotificationRequest(medicine);
                     eventReminderProducer.pushEvent(notificationRequest);
                     eventReminder.setStatus(EventStatus.PROCESSED);
 
@@ -74,5 +66,18 @@ public class EventReminderCronJob {
                 eventReminderRepository.save(eventReminder);
             }
         }
+    }
+
+    private NotificationRequest getNotificationRequest(Medicine medicine) {
+        NotificationRequest notificationRequest = new NotificationRequest();
+        notificationRequest.setUserId(medicine.getUserId());
+        notificationRequest.setTemplateId("Paracetamol");
+        HashMap<String, String> title = new HashMap<>();
+        title.put("medicine-reminder", "Medicine");
+        notificationRequest.setTitlePlaceholder(title);
+        HashMap<String, String> values = new HashMap<>();
+        values.put(Constants.MEDICINE_NAME, medicine.getName());
+        notificationRequest.setBodyPlaceHolders(values);
+        return notificationRequest;
     }
 }
