@@ -1,9 +1,9 @@
 package com.singh.astha.medicinereminder.models;
 
 import com.singh.astha.medicinereminder.enums.DosageType;
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 
 @Getter
 @Setter

@@ -1,7 +1,7 @@
 package com.singh.astha.medicinereminder.services.impl;
 
-import com.singh.astha.medicinereminder.dtos.RequestDto.CategoryRequestDto;
-import com.singh.astha.medicinereminder.dtos.ResponseDto.CategoryResponseDto;
+import com.singh.astha.medicinereminder.dtos.request.CategoryRequestDto;
+import com.singh.astha.medicinereminder.dtos.response.CategoryResponseDto;
 import com.singh.astha.medicinereminder.dtos.transformers.CategoryDtoTransformer;
 import com.singh.astha.medicinereminder.exceptions.ResponseException;
 import com.singh.astha.medicinereminder.models.Category;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -53,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
         );
         return categoryPage.stream()
                 .map(categoryDtoTransformer::convertCategoryToCategoryResponseDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

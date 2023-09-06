@@ -1,6 +1,6 @@
 package com.singh.astha.medicinereminder.utils;
 
-public class ErrorMessages {
+public final class ErrorMessages {
 
     public static final String INVALID_TOKEN = "Invalid Token";
     public static final String AUTHORIZATION_HEADER_MUST_NOT_BE_NULL_AND_MUST_START_BE_BEARER = "Authorization Header must not be null and must start be Bearer";
@@ -15,5 +15,8 @@ public class ErrorMessages {
     public static final String DOSAGE_TYPE_IS_NOT_CORRECT = "Dosage type is not correct";
     public static final String ALL_CATEGORY_IDS_ARE_NOT_FOUND = "All category Ids are not found";
     public static final String DOSAGE_HISTORY_IS_NOT_PRESENT = "Dosage history is not present";
+
+    private ErrorMessages() {
+    }
 }
 
