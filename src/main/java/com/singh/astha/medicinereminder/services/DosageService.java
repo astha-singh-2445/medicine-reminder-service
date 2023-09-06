@@ -3,8 +3,8 @@ package com.singh.astha.medicinereminder.services;
 import com.singh.astha.medicinereminder.dtos.RequestDto.DosageHistoryRequestDto;
 import com.singh.astha.medicinereminder.dtos.ResponseDto.DosageHistoryResponseDto;
 import com.singh.astha.medicinereminder.dtos.ResponseDto.MedicineResponseDto;
+import jakarta.transaction.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional

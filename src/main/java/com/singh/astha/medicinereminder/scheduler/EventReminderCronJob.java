@@ -1,6 +1,5 @@
 package com.singh.astha.medicinereminder.scheduler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.singh.astha.medicinereminder.dtos.kafka.NotificationRequest;
 import com.singh.astha.medicinereminder.enums.EventStatus;
 import com.singh.astha.medicinereminder.enums.EventType;
