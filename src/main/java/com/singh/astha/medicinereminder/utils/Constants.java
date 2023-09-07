@@ -18,6 +18,9 @@ public final class Constants {
     public static final String YYYY_MM_DD_HH_MM_SS = "yyyy/MM/dd HH:mm:ss";
     public static final String MEDICINE_ID_NOT_EXIST = "Medicine Id not exist";
     public static final String YYYY_MM_DD = "yyyy/MM/dd";
+    public static final String MEDICINE_REMINDER = "MEDICINE_REMINDER";
+    public static final String REMINDER = "medicine-reminder";
+    public static final String MEDICINE = "Medicine";
 
     private Constants() {
     }

@@ -16,10 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class EventReminderCronJob {
@@ -44,6 +41,7 @@ public class EventReminderCronJob {
         Date date = new Date();
         List<EventReminder> eventReminderList = eventReminderRepository.findByReminderDateAndStatus(
                 dateFormat.format(date), EventStatus.QUEUED);
+        ArrayList<EventReminder> saveEventReminderList = new ArrayList<>();
         for (EventReminder eventReminder : eventReminderList) {
             if (eventReminder.getEventType().equals(EventType.REFILL_REMINDER)) {
                 Object medicineId = eventReminder.getEventData().get(Constants.MEDICINE_ID);
@@ -59,21 +57,21 @@ public class EventReminderCronJob {
                     NotificationRequest notificationRequest = getNotificationRequest(medicine);
                     eventReminderProducer.pushEvent(notificationRequest);
                     eventReminder.setStatus(EventStatus.PROCESSED);
-
                 } else {
                     eventReminder.setStatus(EventStatus.DISCARDED);
                 }
-                eventReminderRepository.save(eventReminder);
+                saveEventReminderList.add(eventReminder);
             }
         }
+        eventReminderRepository.saveAll(saveEventReminderList);
     }
 
     private NotificationRequest getNotificationRequest(Medicine medicine) {
         NotificationRequest notificationRequest = new NotificationRequest();
         notificationRequest.setUserId(medicine.getUserId());
-        notificationRequest.setTemplateId("Paracetamol");
+        notificationRequest.setTemplateId(Constants.MEDICINE_REMINDER);
         HashMap<String, String> title = new HashMap<>();
-        title.put("medicine-reminder", "Medicine");
+        title.put(Constants.REMINDER, Constants.MEDICINE);
         notificationRequest.setTitlePlaceholder(title);
         HashMap<String, String> values = new HashMap<>();
         values.put(Constants.MEDICINE_NAME, medicine.getName());
