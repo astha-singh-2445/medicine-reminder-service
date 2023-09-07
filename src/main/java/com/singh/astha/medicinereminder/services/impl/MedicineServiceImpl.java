@@ -1,8 +1,8 @@
 package com.singh.astha.medicinereminder.services.impl;
 
-import com.singh.astha.medicinereminder.dtos.RequestDto.MedicineRequestDto;
-import com.singh.astha.medicinereminder.dtos.ResponseDto.CategoryResponseDto;
-import com.singh.astha.medicinereminder.dtos.ResponseDto.MedicineResponseDto;
+import com.singh.astha.medicinereminder.dtos.request.MedicineRequestDto;
+import com.singh.astha.medicinereminder.dtos.response.CategoryResponseDto;
+import com.singh.astha.medicinereminder.dtos.response.MedicineResponseDto;
 import com.singh.astha.medicinereminder.dtos.transformers.CategoryDtoTransformer;
 import com.singh.astha.medicinereminder.dtos.transformers.DosageDtoTransformer;
 import com.singh.astha.medicinereminder.dtos.transformers.MedicineDtoTransformer;
@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class MedicineServiceImpl implements MedicineService {
@@ -89,7 +88,7 @@ public class MedicineServiceImpl implements MedicineService {
         Page<Medicine> medicinePage = medicineRepository.findAll(pageRequest, userId, categoryId, false);
         return medicinePage.stream()
                 .map(medicineDtoTransformer::convertMedicineToMedicineResponseDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -143,7 +142,7 @@ public class MedicineServiceImpl implements MedicineService {
             List<Category> categories = categoryRepository.findByMedicineId(medicineId, userId, false);
             List<CategoryResponseDto> categoryResponseDtos = categories.stream()
                     .map(categoryDtoTransformer::convertCategoryToCategoryResponseDto)
-                    .collect(Collectors.toList());
+                    .toList();
             medicineResponseDto.setCategories(categoryResponseDtos);
         }
         return medicineResponseDto;
@@ -169,8 +168,7 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     public List<String> searchMedicine(Long userId, String medicineName) {
-        List<String> medicine = medicineRepository.searchMedicine(userId, medicineName);
-        return medicine;
+        return medicineRepository.searchMedicine(userId, medicineName);
     }
 
     @Override

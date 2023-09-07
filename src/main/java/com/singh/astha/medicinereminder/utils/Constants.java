@@ -1,6 +1,6 @@
 package com.singh.astha.medicinereminder.utils;
 
-public class Constants {
+public final class Constants {
 
     public static final String AUTHORIZATION = "Authorization";
     public static final String USER_ID = "userId";
@@ -18,4 +18,7 @@ public class Constants {
     public static final String YYYY_MM_DD_HH_MM_SS = "yyyy/MM/dd HH:mm:ss";
     public static final String MEDICINE_ID_NOT_EXIST = "Medicine Id not exist";
     public static final String YYYY_MM_DD = "yyyy/MM/dd";
+
+    private Constants() {
+    }
 }

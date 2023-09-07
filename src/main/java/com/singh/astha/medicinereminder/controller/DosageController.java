@@ -1,9 +1,9 @@
 package com.singh.astha.medicinereminder.controller;
 
-import com.singh.astha.medicinereminder.dtos.RequestDto.DosageHistoryRequestDto;
-import com.singh.astha.medicinereminder.dtos.ResponseDto.DosageHistoryResponseDto;
-import com.singh.astha.medicinereminder.dtos.ResponseDto.MedicineResponseDto;
-import com.singh.astha.medicinereminder.dtos.ResponseDto.ResponseWrapper;
+import com.singh.astha.medicinereminder.dtos.request.DosageHistoryRequestDto;
+import com.singh.astha.medicinereminder.dtos.response.DosageHistoryResponseDto;
+import com.singh.astha.medicinereminder.dtos.response.MedicineResponseDto;
+import com.singh.astha.medicinereminder.dtos.response.ResponseWrapper;
 import com.singh.astha.medicinereminder.services.DosageService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
