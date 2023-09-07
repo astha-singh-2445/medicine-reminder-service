@@ -99,6 +99,6 @@ public class MedicineController {
         Long userId = Long.valueOf(authentication.getName());
         medicineService.setReminder(medicineId, dosageCount,
                 userId);
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(String.format("Reminder set successfully for medicine id %s",medicineId)));
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(String.format("Reminder set successfully for medicine id %s", medicineId)));
     }
 }
