@@ -92,4 +92,13 @@ public class MedicineController {
     }
 
 
+    @PatchMapping("/reminder/{medicineId}")
+    public ResponseEntity<ResponseWrapper<String>> setReminder(Authentication authentication,
+                                                               @PathVariable Long medicineId,
+                                                               @RequestParam Integer dosageCount) {
+        Long userId = Long.valueOf(authentication.getName());
+        medicineService.setReminder(medicineId, dosageCount,
+                userId);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(String.format("Reminder set successfully for medicine id %s", medicineId)));
+    }
 }

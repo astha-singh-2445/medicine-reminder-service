@@ -5,11 +5,14 @@ import com.singh.astha.medicinereminder.dtos.response.CategoryResponseDto;
 import com.singh.astha.medicinereminder.dtos.response.MedicineResponseDto;
 import com.singh.astha.medicinereminder.dtos.transformers.CategoryDtoTransformer;
 import com.singh.astha.medicinereminder.dtos.transformers.MedicineDtoTransformer;
+import com.singh.astha.medicinereminder.enums.DosageType;
 import com.singh.astha.medicinereminder.exceptions.ResponseException;
 import com.singh.astha.medicinereminder.models.Category;
+import com.singh.astha.medicinereminder.models.DosageHistory;
 import com.singh.astha.medicinereminder.models.Medicine;
 import com.singh.astha.medicinereminder.models.MedicineCategory;
 import com.singh.astha.medicinereminder.repository.CategoryRepository;
+import com.singh.astha.medicinereminder.repository.DosageHistoryRepository;
 import com.singh.astha.medicinereminder.repository.MedicineCategoryRepository;
 import com.singh.astha.medicinereminder.repository.MedicineRepository;
 import com.singh.astha.medicinereminder.services.MedicineService;
@@ -37,16 +40,19 @@ public class MedicineServiceImpl implements MedicineService {
     private final MedicineCategoryRepository medicineCategoryRepository;
     private final CategoryDtoTransformer categoryDtoTransformer;
 
+    private final DosageHistoryRepository dosageHistoryRepository;
+
     @Autowired
     public MedicineServiceImpl(MedicineRepository medicineRepository, MedicineDtoTransformer medicineDtoTransformer,
                                CategoryRepository categoryRepository,
                                MedicineCategoryRepository medicineCategoryRepository,
-                               CategoryDtoTransformer categoryDtoTransformer) {
+                               CategoryDtoTransformer categoryDtoTransformer, DosageHistoryRepository dosageHistoryRepository) {
         this.medicineRepository = medicineRepository;
         this.medicineDtoTransformer = medicineDtoTransformer;
         this.categoryRepository = categoryRepository;
         this.medicineCategoryRepository = medicineCategoryRepository;
         this.categoryDtoTransformer = categoryDtoTransformer;
+        this.dosageHistoryRepository = dosageHistoryRepository;
     }
 
     @Override
@@ -57,6 +63,8 @@ public class MedicineServiceImpl implements MedicineService {
             throw new ResponseException(HttpStatus.BAD_REQUEST, ErrorMessages.SAME_MEDICINE_IS_ALREADY_EXIST);
         }
         Medicine savedMedicine = medicineRepository.save(medicine);
+        DosageHistory dosageHistory = initialiseDosageHistory(userId, savedMedicine);
+        dosageHistoryRepository.save(dosageHistory);
         return medicineDtoTransformer.convertMedicineToMedicineResponseDto(savedMedicine);
     }
 
@@ -160,6 +168,27 @@ public class MedicineServiceImpl implements MedicineService {
     @Override
     public List<String> searchMedicine(Long userId, String medicineName) {
         return medicineRepository.searchMedicine(userId, medicineName);
+    }
+
+    @Override
+    public void setReminder(Long medicineId, Integer dosageCount, Long userId) {
+        Optional<Medicine> optionalMedicine = medicineRepository.findByIdAndUserIdAndDeleted(medicineId, userId, false);
+        if (optionalMedicine.isEmpty()) {
+            throw new ResponseException(HttpStatus.NOT_FOUND, ErrorMessages.MEDICINE_NOT_EXIST);
+        }
+        Medicine medicine = optionalMedicine.get();
+        medicine.setRemindBeforeDosageCount(dosageCount);
+        medicineRepository.save(medicine);
+    }
+
+    private DosageHistory initialiseDosageHistory(Long userId, Medicine savedMedicine) {
+        DosageHistory dosageHistory = new DosageHistory();
+        dosageHistory.setMedicineId(savedMedicine.getId());
+        dosageHistory.setMedicine(savedMedicine);
+        dosageHistory.setDosage(savedMedicine.getCurrentDosage());
+        dosageHistory.setType(DosageType.REFILL);
+        dosageHistory.setUserId(userId);
+        return dosageHistory;
     }
 
 }
